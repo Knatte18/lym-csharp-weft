@@ -1,1 +1,16 @@
-# This file holds the hub's tuned values over lyx's template.
+tiers:
+    tier0:
+        about: "fast tests, Slow category excluded"
+        command: "dotnet test LyxCsharp.sln --filter \"Category!=Slow\" {args}"
+        counter: vstest
+        timeout_min: 10
+    tier1:
+        about: "slow tests"
+        command: "dotnet test LyxCsharp.sln --filter Category=Slow {args}"
+        counter: vstest
+        timeout_min: 30
+gates:
+    batch: [0]
+    round: [0]
+    final: [0, 1]
+    landing: [0, 1]
