@@ -1,0 +1,64 @@
+<!-- This is the Discussion-Review rubric. It is read by the Bouncer row and the review row of the Discussion-Review perch:
+     the Discussion-Bouncer row interpolates it as bouncer-template-seed.md's and
+     bouncer-template-judge.md's rubric marker value, and the Discussion-Burler-Review row interpolates it
+     the same way into internal/burlerengine's own review prompt.
+     It is a marker VALUE, never a template -- its only markers are the ones ReadRubric fills, and
+     internal/stencil's StripLeadingComment removes this leading comment before either consumer ever
+     sees it.
+lyx-stencil: sha256=d252a7b321b5db808791615c8e13eec39b8c976383dc82537a98fed79e17cd34 build=444375fb9d2e2a0ad3f0a3db845ab3c3a50f634b time=2026-10-22T12:25:05Z -->
+
+# Discussion-Review rubric
+
+The subject under review is the discussion artifact pair, `decision-record.md` and `support-log.md`.
+The mechanical section contract over that pair — which sections exist, in which file — is enforced by this round's own gate over this round's own output, and is not this rubric's subject.
+
+`Discussion-Review` is the LLM producer, not the mechanical one — over-flagging is a judgment failure mode a mechanical producer, which has only checks and never judgment, cannot exhibit.
+
+## Do not flag
+
+Do not flag any of the following as a finding:
+
+- **A missing "Notes for the plan writer" subsection.**
+  It is optional by contract; its absence is never a deficiency.
+- **Missing rejected alternatives in `decision-record.md`.**
+  Rejected alternatives belong in `support-log.md`'s Rejected alternatives section, not in `decision-record.md`;
+  their absence from `decision-record.md` is by design, not an omission.
+- **Incomplete call-site or cross-reference enumeration.**
+  That enumeration belongs to the compiler and to `Plan-Write`'s own quarry lookups, not to `Discussion-Review`.
+
+## Also flag
+
+- **Relocation and exclusion findings are legitimate, on equal footing with gap-filling findings.**
+  Accept "this belongs in `support-log.md`, not `decision-record.md`" and "this doesn't belong in Discussion at all" as legitimate findings, exactly as legitimate as a finding that fills a gap.
+  A review loop that can only resolve a finding by adding content is the concrete mechanism behind discussion files that only grow across rounds.
+- **The completeness-before-leanness test.**
+  Before raising any relocation finding, check whether the content carries a requirement or constraint the plan writer needs.
+  Extract that into `decision-record.md`'s own Decisions or Constraints first, and move only the surrounding deliberation narrative — because `Plan-Write` never reads `support-log.md`, making a careless move a silent loss rather than a relocation.
+- **The attack-surface question.**
+  For every new verb, flag, escape hatch or routing edge, and every guard that is removed, downgraded or bypassable, the Decision that introduces it states what it can now skip or let through and what bounds it.
+  A Decision that introduces one with no stated bound is a finding.
+- **A deferred research question.**
+  A Decision, Constraint, risk or acceptance criterion that leaves a fact the design rests on to be found out later, by Plan or an implementer, is a finding;
+  so is a rule that hands downstream a halt on discovering such a fact.
+  The fix is the research done and its answer recorded with the evidence it rests on.
+  A fact the writer was told not to gather is no such question.
+- **A Decision that edits the task's own board entry.**
+  A Decision that asks the run to change this task's own board entry's body or scope, through `lyx board` or otherwise, is a finding, because the run's board lock refuses such a change.
+  A Decision that writes another entry, the entry's status or its `run_settings`, or changes board-module code is not flagged by this bullet.
+- **The writer/reviewer symmetry note.**
+  The discussion writer's own stencil is `{{.stencils_dir}}/loom/loom-template-discussion.md`, and the record rules it follows are in `{{.specs_dir}}/loom/loom-discussion-spec.md`: read them to learn what the writer was told not to gather.
+  Whatever it says not to gather, this rubric must not flag as missing, or the additive bias reappears even with the writer-side fix in place.
+
+## Amendment
+
+{{.amendment}}
+
+When the note above is not `none`, this round reviews an amendment: review only the change it names, and report nothing about the settled remainder.
+
+## Finding class
+
+Every finding carries one class: `design`, `scope`, `decision` or `consistency`.
+Their generic meanings are in burler's review step; this section does not restate them.
+In this segment, `design` means the design is wrong: a wrong or missing decision, or a false premise.
+A recurring enumeration gap is filed once as a `design` finding about the method, not once per missing item.
+Class never changes whether a finding is fixed.
