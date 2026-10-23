@@ -1,7 +1,6 @@
 <!-- This is the soft-trigger note request `lyx orch` posts as creel mail to the orchestrator session at a natural break below the hard cap, rendered by RenderSoftHandoffInstruction (internal/orchengine/prompt.go).
      Its markers are {{.handoff_path}}, the file the session writes its orch note to, and {{.note_template_path}}, the template the note follows.
-     The mail's id is assigned when it is posted, so the text names the id the `[creel]` line carrying it opens with.
-lyx-stencil: sha256=680322e133dadd1a3744d12adb13d2447b95cd01056756be676abe4e4d0414f4 build=444375fb9d2e2a0ad3f0a3db845ab3c3a50f634b time=2026-10-22T12:25:05Z -->
-A context cycle is due but optional: if work a cycle would lose is in flight (a subagent or fork mid-task, an edit half done), answer this message with `lyx creel post --reply <id> defer` and write no file; otherwise write the orch note to {{.handoff_path}} following the template {{.note_template_path}}.
-Once the note is written, answer this message with `lyx creel post --reply <id> "written {{.handoff_path}}"`, then end your turn.
-Here `<id>` is the number after `#` in the `[creel]` line that carried this message.
+     The mail's id is assigned when it is posted, so the text names the id the `[creel]` line carrying it opens with, for the `defer` reply.
+lyx-stencil: sha256=069e7d8f5d091d51b56a81e6e6bbe76efc8be107aeeec5a7e7cb83c539d63e85 build=c14db65e04b460c2ee5e6888f0ed2e9ebc1f851e time=2026-10-23T09:11:03Z -->
+A context cycle is due but optional: if work a cycle would lose is in flight (a subagent or fork mid-task, an edit half done), answer this message with `lyx creel post --reply <id> defer` and write no file, where `<id>` is the number after `#` in the `[creel]` line that carried this message.
+Otherwise write the orch note to {{.handoff_path}} following the template {{.note_template_path}}, then end your turn, with no reply.
