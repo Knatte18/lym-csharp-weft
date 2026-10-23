@@ -10,7 +10,5 @@ tiers:
         counter: vstest
         timeout_min: 30
 gates:
-    batch: [0]
-    round: [0]
     final: [0, 1]
     landing: [0, 1]
