@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-10-24 06:49 UTC; every age below is as of then.
+Rendered 2026-10-24 06:50 UTC; every age below is as of then.
 Prime owner: `neve`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -19,11 +19,3 @@ _None._
 ## Notes
 
 Not tasks: ideas and observations, merged into a task when one is promoted.
-
-## Done
-
-Finished, awaiting `lyx board prune --apply`.
-
-| # | Entry | Slug | Age<br>Revised | Labels |
-| --- | --- | --- | --- | --- |
-| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | 15m<br>15m |  |
