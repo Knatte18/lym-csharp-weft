@@ -16,7 +16,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | darn | Code-Bouncer | neve | 1m<br>1m |  |
+| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | darn | Code-Burler-Review | neve | 2m<br>2m |  |
 
 ### Ready
 
