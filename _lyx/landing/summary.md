@@ -1,16 +1,32 @@
-# Add a Haaland friction model
+# Add HaalandFriction, an explicit turbulent friction model
 
-Adds `HaalandFriction`, a second `IFrictionModel` in `LyxCsharp.Hydraulics` beside `SwameeJainFriction`.
-Below Re 2300 it returns the laminar 64/Re;
-at or above it, it solves the Haaland explicit formula 1/√f = −1.8 log10((ε/D / 3.7)^1.11 + 6.9/Re) for the Darcy factor.
-A non-positive Reynolds number throws `ArgumentOutOfRangeException`, with the same message as `SwameeJainFriction`.
+`LyxCsharp.Hydraulics` gains `HaalandFriction`, a sealed `IFrictionModel` that offers the Haaland explicit formula as a second turbulent correlation beside `SwameeJainFriction`.
+Callers that want Haaland pass it where they pass any `IFrictionModel`; nothing existing changes.
 
-## Tests
+The model returns `64 / Re` below Re 2300.
+At or above 2300 it returns `f = 1 / (-1.8 log10((relativeRoughness / 3.7)^1.11 + 6.9 / Re))^2`.
+A non-positive Reynolds number throws `ArgumentOutOfRangeException` for `reynolds`, with the same message as `SwameeJainFriction`.
 
-`tests/LyxCsharp.Hydraulics.Tests/HaalandFrictionTests.cs` covers the laminar branch, a smooth turbulent factor at Re 100 000 in the 0.017–0.020 range, roughness raising the factor, the throw for zero and negative Reynolds numbers, and agreement with `SwameeJainFriction` within 3 percent relative across smooth and rough pipes from Re 10^4 to 10^7.
+No issue is resolved by this change, so there is no `Closes` line.
 
 ## Design decisions
 
-- The laminar cut-off stays at 2300, matching `SwameeJainFriction`, so the two models are interchangeable behind `IFrictionModel`.
-- The laminar branch and Reynolds guard are duplicated rather than pulled into a shared base class; two short call sites don't justify the abstraction.
-- "Within 3 percent" is measured relative to the Swamee-Jain value, via NUnit's `Within(3).Percent`.
+- The 2300 laminar cut-off and the guard match `SwameeJainFriction`, so the two models are interchangeable.
+- `SwameeJainFriction`, `IFrictionModel` and `PipeFlow`'s default model are untouched.
+- The tests live in their own `HaalandFrictionTests` fixture rather than in `FrictionTests`.
+
+## Tests
+
+`HaalandFrictionTests` covers:
+
+- the laminar branch;
+- a smooth turbulent factor at Re 100000, in the range 0.017 to 0.020;
+- roughness raising the factor;
+- the throw for zero and negative Reynolds numbers;
+- agreement with `SwameeJainFriction` within 3 percent relative over four cases spanning Re 10^4 to 10^7 and smooth to rough pipes.
+
+The agreement bound is not loosened to fit: Haaland and Swamee-Jain can differ by more than 3 percent at some roughness and Reynolds combinations, so the cases were chosen where both correlations are valid and agree.
+
+## To check by hand
+
+`dotnet test` for the hydraulics test project was not run as part of writing this description.
