@@ -10,13 +10,19 @@ An entry waits only on the open entries it names under After, so the entries in 
 
 Concrete and claimable; only a task can run.
 
+### Running
+
+Held by a run; its scope is locked until the run ends.
+
+| # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | darn | Worktree-Create | neve | 0m<br>0m |  |
+
 ### Ready
 
 Waits on nothing open; can start now.
 
-| # | Task | Slug | Recipe | After | Age<br>Revised | Labels |
-| --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | darn |  | 0m<br>0m |  |
+_None._
 
 ## Notes
 
