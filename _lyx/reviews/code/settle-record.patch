@@ -1,0 +1,84 @@
+diff --git a/src/LyxCsharp.Hydraulics/HaalandFriction.cs b/src/LyxCsharp.Hydraulics/HaalandFriction.cs
+new file mode 100644
+index 0000000..7662451
+--- /dev/null
++++ b/src/LyxCsharp.Hydraulics/HaalandFriction.cs
+@@ -0,0 +1,21 @@
++namespace LyxCsharp.Hydraulics;
++
++/// <summary>Laminar 64/Re below 2300, the Haaland explicit formula above.</summary>
++public sealed class HaalandFriction : IFrictionModel
++{
++    public double FrictionFactor(double reynolds, double relativeRoughness)
++    {
++        if (reynolds <= 0)
++        {
++            throw new ArgumentOutOfRangeException(nameof(reynolds), "Reynolds number must be positive.");
++        }
++
++        if (reynolds < 2300)
++        {
++            return 64.0 / reynolds;
++        }
++
++        var inverseSqrtFactor = -1.8 * Math.Log10(Math.Pow(relativeRoughness / 3.7, 1.11) + 6.9 / reynolds);
++        return 1.0 / (inverseSqrtFactor * inverseSqrtFactor);
++    }
++}
+diff --git a/tests/LyxCsharp.Hydraulics.Tests/HaalandFrictionTests.cs b/tests/LyxCsharp.Hydraulics.Tests/HaalandFrictionTests.cs
+new file mode 100644
+index 0000000..b6a40d9
+--- /dev/null
++++ b/tests/LyxCsharp.Hydraulics.Tests/HaalandFrictionTests.cs
+@@ -0,0 +1,51 @@
++using LyxCsharp.Hydraulics;
++
++namespace LyxCsharp.Hydraulics.Tests;
++
++public class HaalandFrictionTests
++{
++    private readonly HaalandFriction _model = new();
++
++    [TestCase(500.0)]
++    [TestCase(1000.0)]
++    [TestCase(2000.0)]
++    public void LaminarFactorIs64OverRe(double reynolds)
++    {
++        Assert.That(_model.FrictionFactor(reynolds, 0.001), Is.EqualTo(64.0 / reynolds).Within(1e-12));
++    }
++
++    [Test]
++    public void SmoothTurbulentFactorIsInExpectedRange()
++    {
++        var factor = _model.FrictionFactor(100_000, 0.0);
++
++        Assert.That(factor, Is.InRange(0.017, 0.020));
++    }
++
++    [Test]
++    public void RoughnessRaisesFactor()
++    {
++        var smooth = _model.FrictionFactor(100_000, 0.0001);
++        var rough = _model.FrictionFactor(100_000, 0.01);
++
++        Assert.That(rough, Is.GreaterThan(smooth));
++    }
++
++    [TestCase(0.0)]
++    [TestCase(-5.0)]
++    public void NonPositiveReynoldsThrows(double reynolds)
++    {
++        Assert.Throws<ArgumentOutOfRangeException>(() => _model.FrictionFactor(reynolds, 0.001));
++    }
++
++    [TestCase(10_000.0, 0.0)]
++    [TestCase(100_000.0, 0.0001)]
++    [TestCase(1_000_000.0, 0.001)]
++    [TestCase(10_000_000.0, 0.01)]
++    public void TurbulentFactorAgreesWithSwameeJainWithinThreePercent(double reynolds, double relativeRoughness)
++    {
++        var swameeJain = new SwameeJainFriction().FrictionFactor(reynolds, relativeRoughness);
++
++        Assert.That(_model.FrictionFactor(reynolds, relativeRoughness), Is.EqualTo(swameeJain).Within(3).Percent);
++    }
++}
