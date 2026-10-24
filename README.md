@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-10-24 06:36 UTC; every age below is as of then.
+Rendered 2026-10-24 06:37 UTC; every age below is as of then.
 Prime owner: `neve`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -16,7 +16,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | darn | Code-Burler-Review | neve | 2m<br>2m |  |
+| T1 | **Add a Haaland friction model**<br>• Add HaalandFriction, an IFrictionModel using the Haaland explicit formula for turbulent flow, with NUnit tests. | [`haaland-friction`](design-haaland-friction.md) | darn | Code-Burler-Fix | neve | 3m<br>3m |  |
 
 ### Ready
 
