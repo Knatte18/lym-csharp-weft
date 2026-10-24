@@ -1,4 +1,4 @@
-<!-- lyx-stencil: sha256=3807d043849b1a608592bf0fc27733657b3757421af1860e1606df2b454c27f1 build=444375fb9d2e2a0ad3f0a3db845ab3c3a50f634b time=2026-10-22T12:25:05Z -->
+<!-- lyx-stencil: sha256=9133b80581600eef6831f92e2ec33034459b21cbc3d947bab52ac0fad36975ac build=f4a897b8596ca46981eff2f75c951026df02121b time=2026-10-24T06:21:39Z -->
 
 # Final-summary spec — the producer-agnostic final-summary artifact
 
@@ -46,4 +46,4 @@ A producer may append its own sections to the body after writing it, and any suc
 
 ## See also
 
-- [webster-spec.md](webster-spec.md) — webster's own writer-side additions: when the artifact is required, its archive-never-refuse discipline, the flaky-failure section the verify gate appends for identities that passed on rerun, and the "Verify gate fixes" section Merriam writes after a fixer fork.
+- [webster-spec.md](webster-spec.md) — webster's own writer-side additions: when the artifact is required, its archive-never-refuse discipline, the flaky-failure section the verify gate appends for identities that passed on rerun, and the "Verify gate fixes" section Merriam writes after a verify-gate fixer.
