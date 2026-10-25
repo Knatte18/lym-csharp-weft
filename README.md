@@ -1,21 +1,23 @@
 # Board
 
-Rendered 2026-10-24 06:50 UTC; every age below is as of then.
+Rendered 2026-10-25 15:36 UTC; every age below is as of then.
 Prime owner: `neve`.
 
 Tasks are grouped by dependency layer and notes by type.
 An entry waits only on the open entries it names under After, so the entries in one layer can run in parallel.
 
-## Tasks
+## Tasks (1)
 
 Concrete and claimable; only a task can run.
 
-### Ready
+### Ready (1)
 
 Waits on nothing open; can start now.
 
-_None._
+| # | Task | Slug | Recipe | After | Age<br>Revised | Labels |
+| --- | --- | --- | --- | --- | --- | --- |
+| T1 | `draft` **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | loom |  | 0m<br>0m |  |
 
-## Notes
+## Notes (0)
 
 Not tasks: ideas and observations, merged into a task when one is promoted.

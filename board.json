@@ -1,5 +1,25 @@
 {
   "version": 1,
-  "entries": [],
-  "prime_owner": "neve"
+  "entries": [
+    {
+      "id": 0,
+      "handle": "T1",
+      "slug": "regression-harness",
+      "title": "Capture/compare regression harness",
+      "kind": "task",
+      "labels": [
+        "enhancement"
+      ],
+      "issues": [],
+      "depends_on": [],
+      "isolated": false,
+      "brief": "A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models",
+      "body": "## Seen (operator, 2026-10-25)\n\nLoomYard is gaining regression rows (Drift-Await, Drift-Verify) that compare a run's numerical output against a captured baseline.\nTheir real target is Models on OSL-1046, whose `NORCE.Models.NumericalBaseline` captures scrubbed output and compares against it.\nProving those rows on Models alone is slow and ties them to one machine.\n\n## Design\n\nThis repository gets a small capture/compare regression harness on the pattern of `NORCE.Models.NumericalBaseline`:\n\n- A capture mode runs a fixed set of cases through `LyxCsharp.Hydraulics` and `LyxCsharp.Reporting` and writes their scrubbed output, one file per case, into a gitignored baseline directory.\n- Scrubbing removes what changes between runs without a code change, such as timestamps and machine paths, and fixes the number formatting so a baseline is stable across machines.\n- A compare mode runs the same cases and fails on the first deviation from the baseline, naming the case, the line and both values.\n- Both modes run from one command the hub's regression config can name, so LoomYard's Drift rows can call capture before a change and compare after it.\n- The harness is ordinary NUnit-hosted .NET code in this repository, with its own tests for capture, scrub and compare.\n\nThe run also proves the whole C# path of a loom run in this hub: Discussion, Plan, Webster, the code perch and Finalize on a .NET repository.\n\n## Out of scope\n\n- Turning on LoomYard's regression rows in this hub: that is a config change once LoomYard ships them.\n- Any change to the existing hydraulics or units behaviour.\n",
+      "status": "draft",
+      "created": "2026-10-25T15:36:09Z",
+      "revised": "2026-10-25T15:36:09Z"
+    }
+  ],
+  "prime_owner": "neve",
+  "draft_status": true
 }
