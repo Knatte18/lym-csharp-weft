@@ -1,14 +1,17 @@
 tiers:
-    tier0:
-        about: "fast tests, Slow category excluded"
-        command: "dotnet test LyxCsharp.sln --filter \"Category!=Slow\" {args}"
-        counter: vstest
-        timeout_min: 10
-    tier1:
-        about: "slow tests"
-        command: "dotnet test LyxCsharp.sln --filter Category=Slow {args}"
-        counter: vstest
-        timeout_min: 30
+  tier0:
+    about: "fast tests, Slow category excluded"
+    command: "dotnet test LyxCsharp.sln --filter \"Category!=Slow\" {args}"
+    counter: vstest
+    timeout_min: 10
+  tier1:
+    about: "slow tests"
+    command: "dotnet test LyxCsharp.sln --filter Category=Slow {args}"
+    counter: vstest
+    timeout_min: 30
 gates:
-    final: [0, 1]
-    landing: [0, 1]
+  webster: {tiers: [0, 1], scope: all}
+  parent-align: {tiers: [0, 1], scope: all}
+  finalize: {tiers: [0, 1], scope: all}
+  darn-write: {tiers: [0, 1], scope: diff}
+  code-burler-fix: {tiers: [0, 1], scope: diff}
