@@ -9,7 +9,7 @@
      twill_directive is a fourth optional marker, rendered by internal/twilldirective through internal/loomengine;
      it sits on the line that would otherwise be blank, so an empty value leaves the blank line and the prompt's bytes unchanged.
      edit_directive is a required marker, rendered unconditionally by internal/editdirective.
-lyx-stencil: sha256=4b3f4965b82ccefaca5cf3b5a0937408306949ef7e99f6009e6189b3215636bd build=a49367dd61e78fa52ab811c1edaf1a70b6d8e001 time=2026-10-24T17:45:18Z -->
+lyx-stencil: sha256=0edb99acfe3be12223592426e2fe55b0fd7ba155f97e6ed9a7e8883da4c158f9 build=e6fbc14c73bc8e30b7b1320595d8b2dcfc066b8d time=2026-10-26T15:16:34Z -->
 
 # Plan — read the decision record, write a plan-format flat-card plan
 
@@ -95,7 +95,7 @@ The plan runs strictly in card order, and the Card Index lists the cards in that
 A card that needs a corpus or a fixture takes it from committed test data in the tree, created by an earlier card where it does not exist yet, never from the live files of other worktrees or the fabric repo.
 `card-fabric-reference` in `{{.specs_dir}}/loom/loom-plan-spec.md` names what the plan gate refuses.
 
-A card that prescribes an addition to a `PATTERN.md` entry line leaves the line under the cap, `pattern-entry-line-cap` in the same spec: the gate fails a fenced verbatim entry line over it.
+A card that prescribes an addition to a `PATTERN.md` entry line leaves the line's rule text under the cap, `pattern-entry-line-cap` in the same spec: the gate fails a fenced verbatim entry line whose rule text is over it.
 A declared `adds` or `changes` entry is prescribed verbatim as its whole overview line in a fenced block on a card that edits `PATTERN.md`.
 A card fences only the new line, never the old one or an example, since the gate reads every fenced line that opens like an entry.
 The plan gate measures the overview those lines project against the headroom line, so a line that grows `PATTERN.md` past it is refused.
@@ -151,6 +151,9 @@ The left-hand token is the handle you just invented; the right-hand token is the
 - The receiver belongs to a method's head: `func (c *Cache) Get(k string) (Row, bool)`.
 
 On a `**Rename:**` pair renaming an existing symbol, the grammar is asymmetric: the `Old` side is always a real glyph (looked up via `lyx quarry`, exactly like any other target), and the `New` side is always a `plan:` handle you invent for the renamed name — never a glyph, since the symbol under its new name does not exist until the rename lands. A file-rename pair (old and new both plain file paths) is unaffected by this rule.
+
+A card that renames a symbol also renames the tests named after it, `Test<Name>` and `Test<Name>_<case>` (`Test<Type>_<Method>` for a method), as `**Rename:**` pairs on the same card, since the implementer renames them with the symbol and a later card naming the old test would no longer match the tree.
+The plan gate refuses a renamed symbol whose same-named test a card still lists under `**Edit:**` with no pair of its own (`rename-leaves-test`).
 
 Every new member a card creates is declared as a `plan:` handle, whether or not a later card references it.
 A handle referenced but never declared, or two `Create:` bullets declaring the same handle, are each hard findings (`handle-dangling`, `handle-collision`) — every handle you invent must be declared exactly once.

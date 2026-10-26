@@ -1,13 +1,9 @@
 <!-- This is the shared edit directive: internal/editdirective.Directive renders it unconditionally into the edit_directive marker of every spawned role's opening stencil.
      It is the rule's only statement. It declares no marker and must stay marker-free.
-lyx-stencil: sha256=eda629ce5b916a9cce4e9ab11a9dcd9b8152f653347f5ecd5b49db130d1920e3 build=444375fb9d2e2a0ad3f0a3db845ab3c3a50f634b time=2026-10-22T12:25:05Z -->
+lyx-stencil: sha256=bcaa21fe28d53daaa8f1e7ac801b3686f21c9ab103215be3745f32ab187aceb5 build=e6fbc14c73bc8e30b7b1320595d8b2dcfc066b8d time=2026-10-26T15:16:34Z -->
 
 ## Editing files
 
-Change files only with Edit or Write, never with a script that rewrites them: never `sed -i`, never `perl -i`, never `awk`, and never `python` or `node` in an inline heredoc.
-A bulk change is one Edit per site, or `replace_all` for an identical string.
-The one exception is a Webster implementer working a `Rename` card's symbol pair: it runs the rename tool its prompt names.
-That covers only commands the prompt's `rename_tools` list names, only on a `Rename` card's symbol pairs, and only in a Webster fork or recovery strand, and the shell guard's rows still apply to the tool.
-Reading with `sed -n`, `grep` or `cat` is fine.
+Change files with Edit or Write, or by script with `sed -i`, `perl -i`, `awk` or a shell heredoc or redirect wherever a script is simpler, such as a mechanical change across many sites.
 A Go file's formatting is fixed with `lyx loom fmt <file>`.
 Scratch files go under `.scratch/` in the working directory, never a system temp directory, and are removed by their literal path.
