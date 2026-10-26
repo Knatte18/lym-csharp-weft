@@ -1,4 +1,4 @@
-<!-- lyx-stencil: sha256=fb7789c804f431e561627c9f4131e0610b3e3e63fd4e9e14cacd1eac361e82f9 build=dd86d742f01827d6f110e133320d1d8ee1342784 time=2026-10-25T11:17:48Z -->
+<!-- lyx-stencil: sha256=bc7b0c7016024071946375c16884dbb75aa23571bd9ed077ba993a0d7094d745 build=e6fbc14c73bc8e30b7b1320595d8b2dcfc066b8d time=2026-10-26T15:16:34Z -->
 
 # Loom plan-spec — flat card list
 
@@ -534,6 +534,8 @@ The rows below stay in one fixed order regardless of which entry point runs them
     Each span is matched on its own, with the same rule the implementer audit uses.
     The finding names the card, or for the overview the section the hit is in, and the matched text.
     Its way forward is to take the data from committed test data an earlier card creates, or to drop the command.
+    The path rule also runs over each card id, since a slug ending in the fabric suffix makes every command naming the card, its own `lyx gate test --card` run included, a fabric reference to the implementer audit.
+    That finding names the card and the matched id, and its way forward is to rename the card in the Card Index and its file name.
     The plan index runs it in its format validation, so both plan gates and `lyx loom validate-plan`'s default and `--rework` modes report it; `--require-approved`, webster's own `validate` verb and dispatch validation do not run it.
     It only refuses and removes no guard: it misses a spelling in `bash -c "…"` or built from a variable, the rest of a span after an unterminated quote, a spelling in an inline span or prose, and a fabric-repo path not spelled as a name ending in the suffix, and the implementer audit stays the guard for those.
 38. `verify-module-wide` — a raw Go test, build or vet command in a card's `**Verify:**` value whose package argument holds `...` or equals `all`, or a raw Go test command whose `-tags` value names `tmux`, `llm`, `tier2` or `tier3`.
@@ -543,7 +545,7 @@ The rows below stay in one fixed order regardless of which entry point runs them
     Its way forward is `lyx gate test --wait --tier <n> --card <id>` over the card's own scope, run in the foreground under the gate rule in the agent's system prompt.
     Runs under any `language:` and is reported by both plan gates, `lyx loom validate-plan` and dispatch through `ValidateFormat`.
     It only refuses: it misses a command built from a variable or behind `bash -c`.
-39. `pattern-entry-line-cap` — a card that prescribes a verbatim `PATTERN.md` entry line over the cap: a line inside a fenced code block of the card file that opens with ``- `PATTERN-`` and exceeds `pattern.MaxEntryLineChars` runes.
+39. `pattern-entry-line-cap` — a card that prescribes a verbatim `PATTERN.md` entry line whose rule text is over the cap: a line inside a fenced code block of the card file that opens with ``- `PATTERN-`` and whose rule text, the part between the name and a trailing `(test)` or background link, exceeds `pattern.MaxEntryTextChars` runes.
     It scans fenced blocks only, whatever the fence's info string and including an unclosed fence; inline spans and prose are never scanned, since an entry line carries backticks of its own.
     One finding per line, attributed to the card, naming the entry, the length and the cap; its way forward is to shorten the line or move the detail to the entry's background file.
     Runs under any `language:` and is reported by both plan gates, `lyx loom validate-plan` and dispatch through `ValidateFormat`.
@@ -615,11 +617,16 @@ The rows below stay in one fixed order regardless of which entry point runs them
     An `Extends` ref that is also under `Uses:` is `card-field-overlap`, since the card's flat targets hold it.
 52. `extends-resign` — an arrow sub-bullet in an `Extends` group.
     One blocking finding per arrow, naming the card and the member; its way forward is to move that ref under `**Edit:**`, since a re-sign changes what is already there.
+53. `rename-leaves-test` — under `language: go`, a symbol `Rename` pair renaming `unit#Name`, or the method `unit#T.M`, while a card lists a test named after it under `Edit` in the same unit and no `Rename` pair renames that test.
+    A test is named after the symbol when it is `Test<base>` or `Test<base>_<case>`, with base `Name`, or `T_M` for a method; `TestNameX` is not.
+    An implementer renames such a test with its symbol, so a later card still naming the old test refuses at its `begin-batch`.
+    One blocking finding per test ref, attributed to the renaming card and naming the card that edits the test; its way forward is to add the test's rename as a `Rename` pair on the renaming card.
 
 `plan-language-mismatch` and `rename-namespace-pair` run in the position of their own place in the order, not of their numbers: the first right after `plan-language-unrecognized`, the second right after `path-missing`.
 `extends-overlap` and `extends-resign` run right after `card-field-overlap`, in that order.
+`rename-leaves-test` runs right after `rename-mechanic-missing`.
 
-A plan under `language: csharp` skips the checks that read Go source or Go toolchain semantics: `verify-nested-module`, `verify-module-wide`, `verify-package-missing`, the `.go` file-unit half of `handle-malformed`, `delete-before-reference`, `caller-uncovered`, and the Go package-directory mapping of a unit.
+A plan under `language: csharp` skips the checks that read Go source or Go toolchain semantics: `verify-nested-module`, `verify-module-wide`, `verify-package-missing`, the `.go` file-unit half of `handle-malformed`, `delete-before-reference`, `caller-uncovered`, `rename-leaves-test`, and the Go package-directory mapping of a unit.
 The remaining checks run under it as they do under `go`.
 
 One further check, `rework-first-card`, is outside both entry points and has no row above.
