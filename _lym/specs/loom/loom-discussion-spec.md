@@ -1,0 +1,105 @@
+<!-- lym-stencil: sha256=b5a121cede2c9d5f933d887c33957392a655c97dcc2ac06db260ccc6de27674c build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+
+# Discussion spec — the decision record, the support log and the relevant list
+
+> **Status: Contract — pinned.** This doc pins the format of the three files a design step writes: the decision record, the support log and the relevant list.
+> Durable reference doc — kept, not deleted on landing.
+> `internal/discussionparser` checks the format.
+
+## The decision record
+
+The decision record is the plan writer's design input, and `relevant.md` is its code head start;
+the plan writer reads nothing else from the discussion directory.
+It carries these H2 sections, in this exact order, and no others besides the two optional ones:
+
+1. `## Goal`
+2. `## Scope`
+3. `## Decisions`
+4. `## Constraints`
+5. `## Auto-mode assumptions`
+6. `## Open risks`
+7. `## Acceptance criteria`
+8. `## PATTERN changes` (optional — the PATTERN entries the task adds, changes or removes, placed after `## Acceptance criteria` and before `## Notes for the plan writer`)
+9. `## Notes for the plan writer` (optional — design hints for the plan writer, never a completeness requirement;
+   a hint may name the symbol it is about)
+
+No frontmatter: no `format:` field, no `approved:` field.
+
+### The PATTERN changes section
+
+The designer lists here every PATTERN entry its design adds, changes or removes.
+The PATTERN edit itself lands in a Webster card, never in the discussion.
+Each entry is one bullet, with `<id>` matching `[a-z0-9-]+`:
+
+- `` - `PATTERN-<id>` — adds: <new entry text> ``
+- `` - `PATTERN-<id>` — changes: <new entry text> ``
+- `` - `PATTERN-<id>` — removes ``
+
+An entry ID is listed at most once.
+An `adds` or `changes` bullet prescribes the overview line `` - `PATTERN-<id>` — <new entry text> ``.
+The discussion check refuses that line, as a `pattern-change-over-cap` finding, when its rule text, the new entry text without a trailing `(test)` or background link, is longer, in characters, than the PATTERN rule-text cap the plan gate's `pattern-entry-line-cap` applies;
+the cap is the same number whatever the entry's name, and `lym loom decision add --pattern-text` applies it when the decision is recorded;
+detail that does not fit belongs in the entry's background file.
+`lym loom decision add` appends a bullet with the suffix ` — added after Discussion (<by>, <date>)`.
+A record without the section is valid.
+
+### Compaction rules
+
+- **`## Decisions` carries Decision + Rationale only.**
+  Never list a rejected alternative here — those go to the support log's `## Rejected alternatives` section instead.
+  A decision record that re-litigates what was *not* chosen is not distilled.
+- **Must-cover test scenarios go under `## Acceptance criteria`.**
+  There is no separate `## Testing` section.
+  A scenario names a behavior to cover, not a test to write, and an existing test or a new table row may meet it.
+- **A Decision that adds an edge or weakens a guard states its bound.**
+  When a Decision introduces a new verb, flag, escape hatch or routing edge, or removes, downgrades or makes bypassable a guard, state in that Decision what it can now skip or let through and what bounds it.
+  The discussion review flags one left unbounded.
+- **No italic prose-coaching.**
+  Write terse, structured prose the plan writer can act on directly — not a template with meta-commentary about how to fill it in.
+
+### Parts no writer authors
+
+- `### Added after Discussion (<by>, <date>): <title>` entries under `## Decisions` are appended only by `lym loom decision add`.
+  A writer never edits or removes one, and a record that drops an entry its history held fails the format check.
+- A `## PATTERN changes` bullet carrying the ` — added after Discussion (<by>, <date>)` suffix is appended only by `lym loom decision add`.
+  A writer never edits or removes one, and a record that drops a bullet its history held fails the format check wherever the check for dropped `### Added after Discussion` entries runs: the darn discussion gate, `lym loom validate-discussion` on a darn run and the verb's darn-record check.
+  A loom run's discussion check reads no history for either.
+- `<!-- lym:carry-over … -->` blocks under `## Open risks` are written only by Go.
+  A writer never authors, edits or removes one.
+
+## The support log
+
+The support log is read only by the discussion review, never by the plan writer.
+It carries these H2 sections, in this exact order:
+
+1. `## Interview` — turn-by-turn, distilled, not a verbatim transcript.
+2. `## Rejected alternatives` — what was considered and not chosen, and why.
+3. `## Review rounds` — seeded with the header and a single line reading `_No rounds yet._`;
+   the review appends round entries here later.
+4. `## Question ledger` — every open and resolved question, including any self-picks made under autonomous mode.
+
+## The relevant list
+
+`relevant.md` is the third file in `_lym/discussion/`, beside the decision record and the support log.
+It lists the files, and the members in them, that the writer read and found relevant, each with one line of why.
+The list of code the writer read belongs here, never in the decision record.
+
+Loom's Discussion-Write lead alone writes the file; a darn writer does not.
+The writer records only what it already read and never searches further to fill the list.
+The list is a head start for the plan writer, never a completeness claim: the plan writer explores the codebase itself.
+
+The format is a markdown bullet list, optionally under one H1 title:
+
+- Each top-level bullet opens with one backticked worktree-relative file path.
+- The path is followed by backticked member names in that file, in plain Go spelling and unqualified (`PlanTable`, `Config.Validate`), wherever the writer read specific members.
+- Then comes ` — ` (space, em dash, space) and one line saying why the file is relevant.
+- No glyphs, signatures, `file:line` citations or code excerpts.
+- No nested bullets and no other non-blank line.
+
+An example entry:
+
+```markdown
+- `internal/x/y.go` `PlanTable`, `Config.Validate` — builds the table the new column joins
+```
+
+`internal/discussionparser` checks a present list; a missing list is never a finding.
