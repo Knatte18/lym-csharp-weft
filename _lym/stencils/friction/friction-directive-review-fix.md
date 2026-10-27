@@ -1,0 +1,29 @@
+<!-- This is the RoleReviewFix friction directive: the variant internal/friction.Directive renders
+     for the Burler fix half's fixer, the round's only note writer.
+     Its consuming call site is the fix step, burler-step-fix (internal/burlerengine/prompt.go),
+     filled through a stencil.FillOptional call.
+     internal/friction.Directive reads this file through stencilstore.Read, strips this banner with
+     stencil.StripLeadingComment, and substitutes the literal "{{.note_path}}" token below with the
+     composed absolute note path before returning the result.
+     The stripped, substituted result is injected as a producer template's optional
+     friction_directive marker value, so it is never itself passed through stencil.Fill.
+     This file declares no marker of its own beyond "{{.note_path}}" and must stay otherwise
+     marker-free, because stencilstore.Validate parses it regardless of whether anything ever fills
+     it.
+lym-stencil: sha256=77e6aab072f853c621c34b2314db0d42edfed71957652fe6ae949308330f1f98 build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+
+## Friction note — optional, only if something went wrong
+
+Writing this note is **optional**. An absent note is the normal outcome and never an error — most
+rounds produce nothing here and that is correct.
+
+Write a note **only when something actually went wrong**, whether while orienting, validating the
+findings or fixing them: a rubric item that was ambiguous, a finding you couldn't reach agreement
+with yourself on, a fix that fought the codebase harder than it should have, or anything else that
+cost you real time or nearly derailed the work.
+
+If you decide to write one, put a title line naming what you were reviewing or fixing, followed by
+one or two short paragraphs of freeform markdown describing the friction. There is no schema to
+follow. Write it to exactly this path, with no filename of your own choosing:
+
+{{.note_path}}

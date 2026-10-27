@@ -1,0 +1,40 @@
+<!-- This is the review half's explore step: explore the target and
+     understand what it is judged against.
+     It is shipped as an embedded default in the top-level stencils package (stencils/stencils.go),
+     seeded to <hub>/_board/_lym/stencils/burler/ and read from there at call time by composeReviewPrompt
+     (prompt.go) via internal/stencil, then read by the reviewer only when its seat stencil
+     (burler-template-reviewer.md) directs it here; the reviewer is its only reader. target, fasit, rubric, and tool_use_rules are top-level {{.X}} substitutions;
+     stencil.Fill requires all four non-empty and there are no {{if}}/{{range}} conditionals anywhere in this file (a required marker inside a conditional branch would render silently blank when present-but-empty — see internal/stencil/stencil.go). pattern_directive is the fifth marker,
+     optional, filled via stencil.FillOptional, and renders as nothing when PATTERN is inactive.
+     focus_directive is the sixth marker, optional, filled via stencil.FillOptional, and renders
+     nothing when the round has no directive.
+     Both stay at the top level, before the first work heading, so their optional-blank semantics hold.
+     fork_reading is the seventh marker, optional, filled via stencil.FillOptional, and renders nothing in a solo round;
+     it sits directly after tool_use_rules on the same line, so an empty value adds no byte.
+lym-stencil: sha256=8404297a9e6adbbd9830dd557f75778ed52a8d0b7120c439f82adc3d0cffdecc build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+
+{{.pattern_directive}}
+{{.focus_directive}}
+## What to review (the target)
+
+{{.target}}
+
+## What to judge it against (the fasit)
+
+{{.fasit}}
+
+The fasit is the source of truth the target is judged AGAINST.
+A review that ignores the fasit degenerates into a pure internal-consistency check — always read it and hold the target to it.
+
+## Rubric
+
+{{.rubric}}
+
+The rubric tells you what counts as BLOCKING, MEDIUM, LOW, or NIT for THIS target.
+It maps its own criteria onto that fixed four-value severity vocabulary;
+it never introduces a new severity name, and neither do you.
+Each finding also carries one of the four classes — `design`, `scope`, `decision`, `consistency` — and the rubric says what `design` means for this target.
+
+## Tool-use rules — how you gather evidence
+
+{{.tool_use_rules}}{{.fork_reading}}
