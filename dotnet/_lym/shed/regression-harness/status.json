@@ -1,12 +1,12 @@
 {
   "current_producer": "Darn-Write",
-  "state": "running",
-  "error": "",
+  "state": "blocked",
+  "error": "gate did not pass after 3 attempts; findings: /home/knatte/Code/lym-csharp-LYMHUB/regression-harness/dotnet/.lym/shed/regression-harness/gate-findings/Darn-Write.md; way forward: run \"lym loom resume\" in the task worktree, which re-spawns Darn-Write with a fresh verify budget",
   "pause_requested": false,
   "activity": {
     "now": "Darn-Write",
-    "last": "Drift-Await → skipped",
-    "wait": ""
+    "last": "Darn-Write → stuck",
+    "wait": "gate did not pass after 3 attempts; findings: /home/knatte/Code/lym-csharp-LYMHUB/regression-harness/dotnet/.lym/shed/regression-harness/gate-findings/Darn-Write.md; way forward: run \"lym loom resume\" in the task worktree, which re-spawns Darn-Write with a fresh verify budget"
   },
   "history": [
     {
@@ -28,6 +28,82 @@
       "output": "",
       "at": "2026-10-28T09:32:32Z",
       "reason": "drift.enabled = false"
+    },
+    {
+      "producer": "Darn-Write",
+      "outcome": "stuck",
+      "output": "/home/knatte/Code/lym-csharp-LYMHUB/regression-harness/dotnet/_lym/landing/summary.md",
+      "at": "2026-10-28T09:57:10Z",
+      "gate_attempts": 3,
+      "gate_spans": [
+        {
+          "gate": "discussion",
+          "kind": "gate",
+          "start": "2026-10-28T09:38:27.605648565Z",
+          "end": "2026-10-28T09:38:27.626718713Z"
+        },
+        {
+          "gate": "discussion",
+          "kind": "gate",
+          "start": "2026-10-28T09:56:46.772270713Z",
+          "end": "2026-10-28T09:56:46.798776649Z"
+        },
+        {
+          "gate": "discussion",
+          "kind": "gate",
+          "start": "2026-10-28T09:57:02.416541358Z",
+          "end": "2026-10-28T09:57:02.431956144Z"
+        },
+        {
+          "gate": "discussion",
+          "kind": "gate",
+          "start": "2026-10-28T09:57:09.267920961Z",
+          "end": "2026-10-28T09:57:09.283716809Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-10-28T09:38:27.662569481Z",
+          "end": "2026-10-28T09:38:27.949011738Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "rework",
+          "start": "2026-10-28T09:38:28.341034756Z",
+          "end": "2026-10-28T09:56:46.751627409Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-10-28T09:56:46.855114564Z",
+          "end": "2026-10-28T09:56:47.116115391Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "rework",
+          "start": "2026-10-28T09:56:48.359472624Z",
+          "end": "2026-10-28T09:57:02.388662767Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-10-28T09:57:02.477903058Z",
+          "end": "2026-10-28T09:57:02.800271296Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "rework",
+          "start": "2026-10-28T09:57:03.217568702Z",
+          "end": "2026-10-28T09:57:09.240632543Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-10-28T09:57:09.326683946Z",
+          "end": "2026-10-28T09:57:09.619871932Z"
+        }
+      ],
+      "budget_exempt": true
     }
   ],
   "product": {
