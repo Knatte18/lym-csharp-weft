@@ -1,6 +1,6 @@
 # Capture/compare regression harness
 
-`regression-harness` · Task · enhancement · running · Darn-Write
+`regression-harness` · Task · enhancement · running · Drift-Verify
 
 ## Seen (operator, 2026-10-25)
 
