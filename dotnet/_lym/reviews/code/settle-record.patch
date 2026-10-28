@@ -1,0 +1,766 @@
+diff --git a/.gitignore b/.gitignore
+index e98887d..a1807b6 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -3,3 +3,4 @@ obj/
+ *.user
+ .vs/
+ TestResults/
++.baseline/
+diff --git a/README.md b/README.md
+index e146f04..0625d83 100644
+--- a/README.md
++++ b/README.md
+@@ -6,6 +6,23 @@ It exercises the C# path end to end: plans in C# glyphs, code written in C#, and
+ - `LymCsharp.Units`: unit conversion for pressure, length and flow.
+ - `LymCsharp.Hydraulics`: pipe flow calculations built on the units library.
+ - `LymCsharp.Reporting`: formatting of calculation results.
++- `LymCsharp.Regression`: a capture/compare regression harness over the other libraries.
+ 
+ The .NET solution lives in `dotnet/`, the hub's anchor, so LoomYard's anchor in a subdirectory is exercised as well.
+ Build and test there with `dotnet build` and `dotnet test`; slow tests carry `[Category("Slow")]`.
++
++## Regression harness
++
++`LymCsharp.Regression` runs a fixed set of hydraulics and reporting cases and checks their output against a captured baseline.
++From `dotnet/`:
++
++```
++dotnet run --project src/LymCsharp.Regression -- capture <baseline_dir> [--skip-file <path>]
++dotnet run --project src/LymCsharp.Regression -- compare <baseline_dir> [--skip-file <path>]
++```
++
++Capture writes each case's scrubbed output to `<baseline_dir>/<case>.txt`: timestamps and machine paths are replaced and numbers rounded to 10 significant digits.
++Compare prints one `drift:` line per drifted case, naming its first deviating line with both values.
++A skip file names one case per line to leave out.
++Exit codes: 0 no drift, 1 drift, 2 usage error.
++Use `.baseline/` as the directory for a local baseline; it is gitignored.
+diff --git a/dotnet/LymCsharp.sln b/dotnet/LymCsharp.sln
+index e2ffcce..3f57ff6 100644
+--- a/dotnet/LymCsharp.sln
++++ b/dotnet/LymCsharp.sln
+@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LymCsharp.Hydraulics.Tests"
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LymCsharp.Units.Tests", "tests\LymCsharp.Units.Tests\LymCsharp.Units.Tests.csproj", "{A92F8012-CA12-445C-AE88-EE938C317F4D}"
+ EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LymCsharp.Regression", "src\LymCsharp.Regression\LymCsharp.Regression.csproj", "{FB917B5C-5AF2-443D-A272-214AF57E52B1}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LymCsharp.Regression.Tests", "tests\LymCsharp.Regression.Tests\LymCsharp.Regression.Tests.csproj", "{9AAC462E-AA9C-4474-AA04-164461BCAA0A}"
++EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Any CPU = Debug|Any CPU
+@@ -87,6 +91,30 @@ Global
+ 		{A92F8012-CA12-445C-AE88-EE938C317F4D}.Release|x64.Build.0 = Release|Any CPU
+ 		{A92F8012-CA12-445C-AE88-EE938C317F4D}.Release|x86.ActiveCfg = Release|Any CPU
+ 		{A92F8012-CA12-445C-AE88-EE938C317F4D}.Release|x86.Build.0 = Release|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Debug|x64.ActiveCfg = Debug|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Debug|x64.Build.0 = Debug|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Debug|x86.Build.0 = Debug|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Release|Any CPU.Build.0 = Release|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Release|x64.ActiveCfg = Release|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Release|x64.Build.0 = Release|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Release|x86.ActiveCfg = Release|Any CPU
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1}.Release|x86.Build.0 = Release|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Debug|x64.ActiveCfg = Debug|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Debug|x64.Build.0 = Debug|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Debug|x86.Build.0 = Debug|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Release|Any CPU.Build.0 = Release|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Release|x64.ActiveCfg = Release|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Release|x64.Build.0 = Release|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Release|x86.ActiveCfg = Release|Any CPU
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A}.Release|x86.Build.0 = Release|Any CPU
+ 	EndGlobalSection
+ 	GlobalSection(SolutionProperties) = preSolution
+ 		HideSolutionNode = FALSE
+@@ -97,5 +125,7 @@ Global
+ 		{CEB8DA1B-FB5B-4262-A7E2-BBCC9090DC42} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+ 		{690E77E3-5F8A-47DA-B569-A4BA4D7191D7} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+ 		{A92F8012-CA12-445C-AE88-EE938C317F4D} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
++		{FB917B5C-5AF2-443D-A272-214AF57E52B1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
++		{9AAC462E-AA9C-4474-AA04-164461BCAA0A} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+ 	EndGlobalSection
+ EndGlobal
+diff --git a/dotnet/src/LymCsharp.Regression/BaselineHarness.cs b/dotnet/src/LymCsharp.Regression/BaselineHarness.cs
+new file mode 100644
+index 0000000..76772e3
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Regression/BaselineHarness.cs
+@@ -0,0 +1,89 @@
++using System.Globalization;
++
++namespace LymCsharp.Regression;
++
++/// <summary>
++/// The first line where a case's scrubbed output departs from its baseline.
++/// A null line is absent: the file ended, or the baseline file does not exist.
++/// </summary>
++public sealed record CaseDeviation(string CaseName, int LineNumber, string? BaselineLine, string? CurrentLine)
++{
++    public override string ToString() =>
++        $"{CaseName} line {LineNumber}: baseline {Show(BaselineLine)}, current {Show(CurrentLine)}";
++
++    private static string Show(string? line) => line is null ? "<absent>" : $"\"{line}\"";
++}
++
++/// <summary>
++/// Captures the scrubbed output of regression cases into a baseline directory, one <c>&lt;case&gt;.txt</c> per case,
++/// and compares a later run against it.
++/// Cases render under the invariant culture, so the current culture never reaches the output.
++/// </summary>
++public sealed class BaselineHarness(string baselineDirectory, IReadOnlyList<RegressionCase> cases)
++{
++    private readonly OutputScrubber scrubber = OutputScrubber.ForMachine(baselineDirectory);
++
++    /// <summary>Writes every case's scrubbed output to the baseline directory, creating it when absent.</summary>
++    public void Capture()
++    {
++        Directory.CreateDirectory(baselineDirectory);
++        foreach (var regressionCase in cases)
++        {
++            File.WriteAllLines(BaselinePath(regressionCase), RenderScrubbed(regressionCase));
++        }
++    }
++
++    /// <summary>
++    /// Compares every case's scrubbed output with its baseline file
++    /// and returns the first deviation of each drifted case; an empty list means nothing drifted.
++    /// </summary>
++    public IReadOnlyList<CaseDeviation> Compare()
++    {
++        var deviations = new List<CaseDeviation>();
++        foreach (var regressionCase in cases)
++        {
++            var path = BaselinePath(regressionCase);
++            var baseline = File.Exists(path) ? File.ReadAllLines(path) : [];
++            var deviation = FirstDeviation(regressionCase.Name, baseline, RenderScrubbed(regressionCase));
++            if (deviation is not null)
++            {
++                deviations.Add(deviation);
++            }
++        }
++
++        return deviations;
++    }
++
++    private static CaseDeviation? FirstDeviation(
++        string caseName, IReadOnlyList<string> baseline, IReadOnlyList<string> current)
++    {
++        for (var index = 0; index < Math.Max(baseline.Count, current.Count); index++)
++        {
++            var baselineLine = index < baseline.Count ? baseline[index] : null;
++            var currentLine = index < current.Count ? current[index] : null;
++            if (baselineLine != currentLine)
++            {
++                return new CaseDeviation(caseName, index + 1, baselineLine, currentLine);
++            }
++        }
++
++        return null;
++    }
++
++    private string BaselinePath(RegressionCase regressionCase) =>
++        Path.Combine(baselineDirectory, regressionCase.Name + ".txt");
++
++    private IReadOnlyList<string> RenderScrubbed(RegressionCase regressionCase)
++    {
++        var originalCulture = CultureInfo.CurrentCulture;
++        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
++        try
++        {
++            return regressionCase.Render().Select(scrubber.Scrub).ToList();
++        }
++        finally
++        {
++            CultureInfo.CurrentCulture = originalCulture;
++        }
++    }
++}
+diff --git a/dotnet/src/LymCsharp.Regression/LymCsharp.Regression.csproj b/dotnet/src/LymCsharp.Regression/LymCsharp.Regression.csproj
+new file mode 100644
+index 0000000..e9bc951
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Regression/LymCsharp.Regression.csproj
+@@ -0,0 +1,10 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <OutputType>Exe</OutputType>
++  </PropertyGroup>
++  <ItemGroup>
++    <ProjectReference Include="..\LymCsharp.Units\LymCsharp.Units.csproj" />
++    <ProjectReference Include="..\LymCsharp.Hydraulics\LymCsharp.Hydraulics.csproj" />
++    <ProjectReference Include="..\LymCsharp.Reporting\LymCsharp.Reporting.csproj" />
++  </ItemGroup>
++</Project>
+diff --git a/dotnet/src/LymCsharp.Regression/OutputScrubber.cs b/dotnet/src/LymCsharp.Regression/OutputScrubber.cs
+new file mode 100644
+index 0000000..217fa2c
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Regression/OutputScrubber.cs
+@@ -0,0 +1,61 @@
++using System.Globalization;
++using System.Text.RegularExpressions;
++
++namespace LymCsharp.Regression;
++
++/// <summary>
++/// Removes from output lines what changes between runs without a code change,
++/// so a baseline compares equal across runs and machines.
++/// Timestamps become <c>&lt;timestamp&gt;</c>, machine roots become <c>&lt;path&gt;</c>,
++/// and every free-standing number is rewritten to 10 significant digits in invariant culture.
++/// </summary>
++public sealed partial class OutputScrubber
++{
++    private readonly Regex[] machineRootPatterns;
++
++    /// <summary>Creates a scrubber that replaces the given directory paths; a filesystem root is ignored.</summary>
++    public OutputScrubber(IEnumerable<string> machineRoots)
++    {
++        machineRootPatterns = machineRoots
++            .Select(Path.TrimEndingDirectorySeparator)
++            .Where(root => root.Length > 0 && Path.GetPathRoot(root) != root)
++            .Distinct()
++            .OrderByDescending(root => root.Length)
++            .Select(root => new Regex(Regex.Escape(root) + @"(?![\w-])"))
++            .ToArray();
++    }
++
++    /// <summary>
++    /// Creates a scrubber for this machine's roots: the baseline directory,
++    /// the current directory, the temp directory and the user's home directory.
++    /// </summary>
++    public static OutputScrubber ForMachine(string baselineDirectory) =>
++        new([
++            Path.GetFullPath(baselineDirectory),
++            Environment.CurrentDirectory,
++            Path.GetTempPath(),
++            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
++        ]);
++
++    /// <summary>Returns the line with timestamps, machine roots and number formatting scrubbed.</summary>
++    public string Scrub(string line)
++    {
++        var scrubbed = TimestampPattern().Replace(line, "<timestamp>");
++        foreach (var rootPattern in machineRootPatterns)
++        {
++            scrubbed = rootPattern.Replace(scrubbed, "<path>");
++        }
++
++        return NumberPattern().Replace(
++            scrubbed,
++            match => double.Parse(match.Value, CultureInfo.InvariantCulture)
++                .ToString("G10", CultureInfo.InvariantCulture));
++    }
++
++    [GeneratedRegex(@"\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?")]
++    private static partial Regex TimestampPattern();
++
++    // A number glued to a letter or a dot, such as the 3 in m3/s or a part of 1.2.3, is not a value.
++    [GeneratedRegex(@"(?<![\w.])-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?(?![\w.])")]
++    private static partial Regex NumberPattern();
++}
+diff --git a/dotnet/src/LymCsharp.Regression/Program.cs b/dotnet/src/LymCsharp.Regression/Program.cs
+new file mode 100644
+index 0000000..70c2736
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Regression/Program.cs
+@@ -0,0 +1,3 @@
++using LymCsharp.Regression;
++
++return RegressionCommand.Run(args, RegressionCases.All, Console.Out, Console.Error);
+diff --git a/dotnet/src/LymCsharp.Regression/RegressionCases.cs b/dotnet/src/LymCsharp.Regression/RegressionCases.cs
+new file mode 100644
+index 0000000..2a83972
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Regression/RegressionCases.cs
+@@ -0,0 +1,68 @@
++using LymCsharp.Hydraulics;
++using LymCsharp.Reporting;
++using LymCsharp.Units;
++
++namespace LymCsharp.Regression;
++
++/// <summary>A named calculation whose rendered lines are captured into a baseline file.</summary>
++public sealed record RegressionCase(string Name, Func<IReadOnlyList<string>> Render);
++
++/// <summary>The fixed regression cases: pipe flow calculations rendered as raw values and a formatted report.</summary>
++public static class RegressionCases
++{
++    private static readonly Pipe SteelDn100 = Pipe.From(
++        new Quantity(100, UnitCatalog.Millimetre),
++        new Quantity(50, UnitCatalog.Metre),
++        new Quantity(0.045, UnitCatalog.Millimetre));
++
++    private static readonly Pipe Pvc2Inch = Pipe.From(
++        new Quantity(2, UnitCatalog.Inch),
++        new Quantity(100, UnitCatalog.Foot),
++        new Quantity(0.0015, UnitCatalog.Millimetre));
++
++    private static readonly Pipe Steel6Inch = Pipe.From(
++        new Quantity(6, UnitCatalog.Inch),
++        new Quantity(1000, UnitCatalog.Foot),
++        new Quantity(0.045, UnitCatalog.Millimetre));
++
++    public static IReadOnlyList<RegressionCase> All { get; } =
++    [
++        PipeFlowCase(
++            "water-steel-dn100-swamee-jain", new SwameeJainFriction(), SteelDn100, Fluid.Water,
++            new Quantity(10, UnitCatalog.LitrePerSecond), UnitCatalog.Pascal),
++        PipeFlowCase(
++            "water-steel-dn100-haaland", new HaalandFriction(), SteelDn100, Fluid.Water,
++            new Quantity(10, UnitCatalog.LitrePerSecond), UnitCatalog.Bar),
++        PipeFlowCase(
++            "oil-steel-dn100-laminar", new SwameeJainFriction(), SteelDn100, Fluid.Oil,
++            new Quantity(0.1, UnitCatalog.LitrePerSecond), UnitCatalog.Kilopascal),
++        PipeFlowCase(
++            "water-pvc-2in-transitional", new SwameeJainFriction(), Pvc2Inch, Fluid.Water,
++            new Quantity(7.2, UnitCatalog.LitrePerMinute), UnitCatalog.Psi),
++        PipeFlowCase(
++            "oil-steel-6in-turbulent", new HaalandFriction(), Steel6Inch, Fluid.Oil,
++            new Quantity(36.5, UnitCatalog.LitrePerSecond), UnitCatalog.Bar),
++    ];
++
++    private static RegressionCase PipeFlowCase(
++        string name, IFrictionModel friction, Pipe pipe, Fluid fluid, Quantity flow, IUnit pressureUnit) =>
++        new(name, () =>
++        {
++            var result = new PipeFlowCalculator(friction).Calculate(pipe, fluid, flow);
++            return
++            [
++                $"fluid = {fluid.Name}",
++                $"friction_model = {friction.GetType().Name}",
++                $"diameter_m = {pipe.DiameterMetres:R}",
++                $"length_m = {pipe.LengthMetres:R}",
++                $"roughness_m = {pipe.RoughnessMetres:R}",
++                $"flow = {flow}",
++                $"velocity_m_per_s = {result.VelocityMetresPerSecond:R}",
++                $"reynolds = {result.Reynolds:R}",
++                $"regime = {result.Regime}",
++                $"friction_factor = {result.FrictionFactor:R}",
++                $"pressure_drop_pa = {result.PressureDropPascals:R}",
++                $"report = {ResultFormatter.Format(result, pressureUnit)}",
++            ];
++        });
++}
+diff --git a/dotnet/src/LymCsharp.Regression/RegressionCommand.cs b/dotnet/src/LymCsharp.Regression/RegressionCommand.cs
+new file mode 100644
+index 0000000..032dd61
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Regression/RegressionCommand.cs
+@@ -0,0 +1,58 @@
++namespace LymCsharp.Regression;
++
++/// <summary>
++/// The harness's command line: <c>capture|compare &lt;baseline_dir&gt; [--skip-file &lt;path&gt;]</c>.
++/// Exits 0 on success, 1 when compare finds drift, and 2 on a usage error.
++/// </summary>
++public static class RegressionCommand
++{
++    public const int Success = 0;
++    public const int Drift = 1;
++    public const int UsageError = 2;
++
++    private const string Usage = "usage: capture|compare <baseline_dir> [--skip-file <path>]";
++
++    /// <summary>
++    /// Runs the mode named by <paramref name="args"/> over <paramref name="cases"/>, less those the skip file names,
++    /// writing drift reports to <paramref name="output"/> and usage errors to <paramref name="error"/>.
++    /// A skip file names one case per line; a missing skip file means no skips.
++    /// </summary>
++    public static int Run(string[] args, IReadOnlyList<RegressionCase> cases, TextWriter output, TextWriter error)
++    {
++        var argumentsValid = (args.Length == 2 || (args.Length == 4 && args[2] == "--skip-file"))
++                             && args[0] is "capture" or "compare"
++                             && !string.IsNullOrWhiteSpace(args[1]);
++        if (!argumentsValid)
++        {
++            error.WriteLine(Usage);
++            return UsageError;
++        }
++
++        var skipFile = args.Length == 4 ? args[3] : null;
++
++        var skipped = skipFile is not null && File.Exists(skipFile)
++            ? File.ReadAllLines(skipFile).Select(line => line.Trim()).Where(line => line.Length > 0).ToHashSet()
++            : [];
++        var unknown = skipped.Where(name => cases.All(c => c.Name != name)).ToList();
++        if (unknown.Count > 0)
++        {
++            error.WriteLine($"unknown case in skip file: {string.Join(", ", unknown)}");
++            return UsageError;
++        }
++
++        var harness = new BaselineHarness(args[1], cases.Where(c => !skipped.Contains(c.Name)).ToList());
++        if (args[0] == "capture")
++        {
++            harness.Capture();
++            return Success;
++        }
++
++        var deviations = harness.Compare();
++        foreach (var deviation in deviations)
++        {
++            output.WriteLine($"drift: {deviation}");
++        }
++
++        return deviations.Count == 0 ? Success : Drift;
++    }
++}
+diff --git a/dotnet/tests/LymCsharp.Regression.Tests/BaselineHarnessTests.cs b/dotnet/tests/LymCsharp.Regression.Tests/BaselineHarnessTests.cs
+new file mode 100644
+index 0000000..8975c7d
+--- /dev/null
++++ b/dotnet/tests/LymCsharp.Regression.Tests/BaselineHarnessTests.cs
+@@ -0,0 +1,131 @@
++using System.Globalization;
++using LymCsharp.Regression;
++
++namespace LymCsharp.Regression.Tests;
++
++public class BaselineHarnessTests
++{
++    private string _workDirectory = null!;
++    private string _baselineDirectory = null!;
++
++    [SetUp]
++    public void CreateWorkDirectory()
++    {
++        _workDirectory = Path.Combine(Path.GetTempPath(), "lym-regression-" + Guid.NewGuid().ToString("N"));
++        _baselineDirectory = Path.Combine(_workDirectory, "nested", "baseline");
++    }
++
++    [TearDown]
++    public void RemoveWorkDirectory()
++    {
++        if (Directory.Exists(_workDirectory))
++        {
++            Directory.Delete(_workDirectory, recursive: true);
++        }
++    }
++
++    [Test]
++    public void CaptureWritesOneScrubbedFilePerCase()
++    {
++        RegressionCase[] cases =
++        [
++            new("first", () => ["value = 1.2732395447351628", "at 2026-10-28T09:32:22Z"]),
++            new("second", () => ["regime = Laminar"]),
++        ];
++
++        new BaselineHarness(_baselineDirectory, cases).Capture();
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(
++                Directory.GetFiles(_baselineDirectory).Select(Path.GetFileName),
++                Is.EquivalentTo(new[] { "first.txt", "second.txt" }));
++            Assert.That(
++                File.ReadAllLines(Path.Combine(_baselineDirectory, "first.txt")),
++                Is.EqualTo(new[] { "value = 1.273239545", "at <timestamp>" }));
++            Assert.That(
++                File.ReadAllLines(Path.Combine(_baselineDirectory, "second.txt")),
++                Is.EqualTo(new[] { "regime = Laminar" }));
++        });
++    }
++
++    [Test]
++    public void CompareAgainstFreshCaptureOfEveryCaseFindsNoDeviation()
++    {
++        var harness = new BaselineHarness(_baselineDirectory, RegressionCases.All);
++
++        harness.Capture();
++
++        Assert.That(harness.Compare(), Is.Empty);
++    }
++
++    [Test]
++    [SetCulture("nb-NO")]
++    public void CasesRenderInInvariantCultureWhateverTheCurrentCulture()
++    {
++        var norwegianDirectory = Path.Combine(_workDirectory, "norwegian");
++        var invariantDirectory = Path.Combine(_workDirectory, "invariant");
++
++        new BaselineHarness(norwegianDirectory, RegressionCases.All).Capture();
++        var cultureOfFirstCapture = CultureInfo.CurrentCulture.Name;
++        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
++        new BaselineHarness(invariantDirectory, RegressionCases.All).Capture();
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(cultureOfFirstCapture, Is.EqualTo("nb-NO"));
++            foreach (var regressionCase in RegressionCases.All)
++            {
++                var fileName = regressionCase.Name + ".txt";
++                Assert.That(
++                    File.ReadAllLines(Path.Combine(norwegianDirectory, fileName)),
++                    Is.EqualTo(File.ReadAllLines(Path.Combine(invariantDirectory, fileName))),
++                    fileName);
++            }
++        });
++    }
++
++    [Test]
++    public void CaptureReplacesTheBaselineDirectoryPathInACaseLine()
++    {
++        RegressionCase[] cases = [new("paths", () => [$"read {_baselineDirectory}{Path.DirectorySeparatorChar}out.txt"])];
++
++        new BaselineHarness(_baselineDirectory, cases).Capture();
++
++        Assert.That(
++            File.ReadAllLines(Path.Combine(_baselineDirectory, "paths.txt")),
++            Is.EqualTo(new[] { $"read <path>{Path.DirectorySeparatorChar}out.txt" }));
++    }
++
++    [Test]
++    public void CompareReportsTheFirstDeviationOfEachDriftedCase()
++    {
++        string[] changed = ["a = 1", "b = 2", "c = 3"];
++        string[] longer = ["a = 1"];
++        string[] shorter = ["a = 1", "b = 2"];
++        RegressionCase[] cases =
++        [
++            new("unchanged", () => ["a = 1"]),
++            new("changed", () => changed),
++            new("longer", () => longer),
++            new("shorter", () => shorter),
++            new("missing", () => ["a = 1"]),
++        ];
++        var harness = new BaselineHarness(_baselineDirectory, cases);
++        harness.Capture();
++        File.Delete(Path.Combine(_baselineDirectory, "missing.txt"));
++
++        changed[1] = "b = 2.5";
++        changed[2] = "c = 4";
++        longer = ["a = 1", "b = 2"];
++        shorter = ["a = 1"];
++
++        Assert.That(harness.Compare(), Is.EqualTo(new[]
++        {
++            new CaseDeviation("changed", 2, "b = 2", "b = 2.5"),
++            new CaseDeviation("longer", 2, null, "b = 2"),
++            new CaseDeviation("shorter", 2, "b = 2", null),
++            new CaseDeviation("missing", 1, null, "a = 1"),
++        }));
++    }
++}
+diff --git a/dotnet/tests/LymCsharp.Regression.Tests/LymCsharp.Regression.Tests.csproj b/dotnet/tests/LymCsharp.Regression.Tests/LymCsharp.Regression.Tests.csproj
+new file mode 100644
+index 0000000..635d7ae
+--- /dev/null
++++ b/dotnet/tests/LymCsharp.Regression.Tests/LymCsharp.Regression.Tests.csproj
+@@ -0,0 +1,15 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <IsPackable>false</IsPackable>
++    <IsTestProject>true</IsTestProject>
++  </PropertyGroup>
++  <ItemGroup>
++    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
++    <PackageReference Include="NUnit" Version="4.3.2" />
++    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
++  </ItemGroup>
++  <ItemGroup>
++    <Using Include="NUnit.Framework" />
++    <ProjectReference Include="..\..\src\LymCsharp.Regression\LymCsharp.Regression.csproj" />
++  </ItemGroup>
++</Project>
+diff --git a/dotnet/tests/LymCsharp.Regression.Tests/OutputScrubberTests.cs b/dotnet/tests/LymCsharp.Regression.Tests/OutputScrubberTests.cs
+new file mode 100644
+index 0000000..754284d
+--- /dev/null
++++ b/dotnet/tests/LymCsharp.Regression.Tests/OutputScrubberTests.cs
+@@ -0,0 +1,26 @@
++using LymCsharp.Regression;
++
++namespace LymCsharp.Regression.Tests;
++
++public class OutputScrubberTests
++{
++    private static readonly OutputScrubber Scrubber = new(["/machine/work/", "/machine", "/"]);
++
++    [TestCase("captured 2026-10-28T09:32:22Z", "captured <timestamp>")]
++    [TestCase("at 2026-10-28 09:32:22.123+02:00 done", "at <timestamp> done")]
++    [TestCase("read /machine/work/out/case.txt", "read <path>/out/case.txt")]
++    [TestCase("read /machine/other", "read <path>/other")]
++    [TestCase("read /machinery/other", "read /machinery/other")]
++    [TestCase("read /machine/work", "read <path>")]
++    [TestCase("failed in /machine: denied", "failed in <path>: denied")]
++    [TestCase("x = 1.2732395447351628", "x = 1.273239545")]
++    [TestCase("reynolds = 127323.95447351628", "reynolds = 127323.9545")]
++    [TestCase("dp = 1e-5", "dp = 1E-05")]
++    [TestCase("delta = -0.50", "delta = -0.5")]
++    [TestCase("flow = 10 l/s, unit m3/s", "flow = 10 l/s, unit m3/s")]
++    [TestCase("version 1.2.3", "version 1.2.3")]
++    public void ScrubsTimestampsMachineRootsAndNumberFormatting(string line, string expected)
++    {
++        Assert.That(Scrubber.Scrub(line), Is.EqualTo(expected));
++    }
++}
+diff --git a/dotnet/tests/LymCsharp.Regression.Tests/RegressionCommandTests.cs b/dotnet/tests/LymCsharp.Regression.Tests/RegressionCommandTests.cs
+new file mode 100644
+index 0000000..f668acf
+--- /dev/null
++++ b/dotnet/tests/LymCsharp.Regression.Tests/RegressionCommandTests.cs
+@@ -0,0 +1,154 @@
++using LymCsharp.Regression;
++
++namespace LymCsharp.Regression.Tests;
++
++public class RegressionCommandTests
++{
++    private string _workDirectory = null!;
++    private string _baselineDirectory = null!;
++    private string _skipFile = null!;
++    private string _valueOfFirst = null!;
++    private RegressionCase[] _cases = null!;
++
++    [SetUp]
++    public void CreateWorkDirectory()
++    {
++        _workDirectory = Path.Combine(Path.GetTempPath(), "lym-regression-" + Guid.NewGuid().ToString("N"));
++        _baselineDirectory = Path.Combine(_workDirectory, "baseline");
++        _skipFile = Path.Combine(_workDirectory, "skip.txt");
++        Directory.CreateDirectory(_workDirectory);
++        _valueOfFirst = "value = 1";
++        _cases =
++        [
++            new("first", () => [_valueOfFirst]),
++            new("second", () => ["value = 2"]),
++        ];
++    }
++
++    [TearDown]
++    public void RemoveWorkDirectory()
++    {
++        Directory.Delete(_workDirectory, recursive: true);
++    }
++
++    [Test]
++    public void CompareExitsZeroAndPrintsNothingWhenNothingDrifted()
++    {
++        Run("capture", _baselineDirectory);
++
++        var (exitCode, output, _) = Run("compare", _baselineDirectory);
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(exitCode, Is.EqualTo(RegressionCommand.Success));
++            Assert.That(output, Is.Empty);
++        });
++    }
++
++    [Test]
++    public void CompareExitsOneAndNamesTheCaseLineAndBothValuesOnDrift()
++    {
++        Run("capture", _baselineDirectory);
++        _valueOfFirst = "value = 1.5";
++
++        var (exitCode, output, _) = Run("compare", _baselineDirectory);
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(exitCode, Is.EqualTo(RegressionCommand.Drift));
++            Assert.That(
++                output,
++                Is.EqualTo($"drift: first line 1: baseline \"value = 1\", current \"value = 1.5\"{Environment.NewLine}"));
++        });
++    }
++
++    [Test]
++    public void SkippedCaseIsNeitherCapturedNorCompared()
++    {
++        File.WriteAllLines(_skipFile, ["second", ""]);
++
++        var (captureExitCode, _, _) = Run("capture", _baselineDirectory, "--skip-file", _skipFile);
++        var capturedFiles = Directory.GetFiles(_baselineDirectory).Select(Path.GetFileName).ToList();
++        var (compareExitCode, output, _) = Run("compare", _baselineDirectory, "--skip-file", _skipFile);
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(captureExitCode, Is.EqualTo(RegressionCommand.Success));
++            Assert.That(capturedFiles, Is.EqualTo(new[] { "first.txt" }));
++            Assert.That(compareExitCode, Is.EqualTo(RegressionCommand.Success));
++            Assert.That(output, Is.Empty);
++        });
++    }
++
++    [Test]
++    public void MissingSkipFileSkipsNothing()
++    {
++        var (exitCode, _, _) = Run("capture", _baselineDirectory, "--skip-file", _skipFile);
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(exitCode, Is.EqualTo(RegressionCommand.Success));
++            Assert.That(
++                Directory.GetFiles(_baselineDirectory).Select(Path.GetFileName),
++                Is.EquivalentTo(new[] { "first.txt", "second.txt" }));
++        });
++    }
++
++    [Test]
++    public void UnknownSkipNameIsAUsageError()
++    {
++        File.WriteAllLines(_skipFile, ["third"]);
++
++        var (exitCode, _, error) = Run("capture", _baselineDirectory, "--skip-file", _skipFile);
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(exitCode, Is.EqualTo(RegressionCommand.UsageError));
++            Assert.That(error, Is.EqualTo($"unknown case in skip file: third{Environment.NewLine}"));
++            Assert.That(Directory.Exists(_baselineDirectory), Is.False);
++        });
++    }
++
++    [TestCase("")]
++    [TestCase("capture")]
++    [TestCase("restore baseline")]
++    [TestCase("compare baseline --skip skip.txt")]
++    [TestCase("compare baseline extra")]
++    public void MalformedArgumentsAreAUsageError(string commandLine)
++    {
++        var (exitCode, output, error) = Run(commandLine.Split(' ', StringSplitOptions.RemoveEmptyEntries));
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(exitCode, Is.EqualTo(RegressionCommand.UsageError));
++            Assert.That(output, Is.Empty);
++            Assert.That(
++                error,
++                Is.EqualTo($"usage: capture|compare <baseline_dir> [--skip-file <path>]{Environment.NewLine}"));
++        });
++    }
++
++    [TestCase("capture")]
++    [TestCase("compare")]
++    public void EmptyBaselineDirectoryIsAUsageError(string mode)
++    {
++        var (exitCode, output, error) = Run(mode, "");
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(exitCode, Is.EqualTo(RegressionCommand.UsageError));
++            Assert.That(output, Is.Empty);
++            Assert.That(
++                error,
++                Is.EqualTo($"usage: capture|compare <baseline_dir> [--skip-file <path>]{Environment.NewLine}"));
++        });
++    }
++
++    private (int ExitCode, string Output, string Error) Run(params string[] args)
++    {
++        var output = new StringWriter();
++        var error = new StringWriter();
++        var exitCode = RegressionCommand.Run(args, _cases, output, error);
++        return (exitCode, output.ToString(), error.ToString());
++    }
++}
