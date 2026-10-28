@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-10-28 10:10 UTC; every age below is as of then.
+Rendered 2026-10-28 10:11 UTC; every age below is as of then.
 Prime owner: `neve`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -16,7 +16,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | darn | Describe | neve | 2d<br>38m |  |
+| T1 | **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | darn | PR-Review | neve | 2d<br>38m |  |
 
 ### Ready (0)
 
