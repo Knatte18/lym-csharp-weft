@@ -1,6 +1,6 @@
 # Capture/compare regression harness
 
-`regression-harness` · Task · enhancement · running · Code-Burler-Fix
+`regression-harness` · Task · enhancement · running · Code-Bouncer
 
 ## Seen (operator, 2026-10-25)
 
