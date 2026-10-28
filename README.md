@@ -16,7 +16,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | darn | Code-Bouncer | neve | 2d<br>37m |  |
+| T1 | **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | darn | Describe | neve | 2d<br>38m |  |
 
 ### Ready (0)
 
