@@ -1,0 +1,20 @@
+{
+  "number": 1,
+  "stop_key": {
+    "current_producer": "Darn-Write",
+    "history_length": 4,
+    "state": "blocked"
+  },
+  "pause_before": "",
+  "pause_after": "",
+  "snapshot": {
+    "head": "0891f8608d858597248bfd122c7f01a23421902b",
+    "branch": "regression-harness",
+    "dirty": {}
+  },
+  "spawned_at": "2026-10-28T10:58:41.372201522+01:00",
+  "deadline": "2026-10-28T11:08:41.372201522+01:00",
+  "envelope_path": "/home/knatte/Code/lym-csharp-LYMHUB/regression-harness/dotnet/_lym/shed/regression-harness/drive-reports/drive-envelope-20261028-105841-3bee.json",
+  "report_path": "/home/knatte/Code/lym-csharp-LYMHUB/regression-harness/dotnet/_lym/shed/regression-harness/drive-reports/drive-report-20261028-105841-6b47.md",
+  "strand_guid": "f908fe5c89b68c8fc208c095f2df7912"
+}
