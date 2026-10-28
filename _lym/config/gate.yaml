@@ -13,5 +13,6 @@ gates:
   webster: {tiers: [0, 1], scope: all}
   parent-align: {tiers: [0, 1], scope: all}
   finalize: {tiers: [0, 1], scope: all}
+  adopt: {tiers: [0, 1], scope: all}
   darn-write: {tiers: [0, 1], scope: diff}
   code-burler-fix: {tiers: [0, 1], scope: diff}
