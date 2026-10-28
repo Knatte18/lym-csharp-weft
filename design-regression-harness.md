@@ -1,6 +1,6 @@
 # Capture/compare regression harness
 
-`regression-harness` · Task · enhancement · running · Finalize
+`regression-harness` · Task · enhancement · done
 
 ## Seen (operator, 2026-10-25)
 
