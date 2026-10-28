@@ -10,19 +10,13 @@ An entry waits only on the open entries it names under After, so the entries in 
 
 Concrete and claimable; only a task can run.
 
-### Ready (0)
+### Ready (1)
 
 Waits on nothing open; can start now.
 
-_None._
-
-### Draft (1)
-
-Not released; nothing starts it until its status is cleared.
-
 | # | Task | Slug | Recipe | After | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- |
-| T1 | `draft` **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | darn |  | 2d<br>0m |  |
+| T1 | **Capture/compare regression harness**<br>• A NumericalBaseline-style capture/compare harness, so LoomYard Drift rows can be proved here before Models | [`regression-harness`](design-regression-harness.md) | darn |  | 2d<br>0m |  |
 
 ## Notes (0)
 

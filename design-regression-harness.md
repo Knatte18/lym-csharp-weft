@@ -1,6 +1,6 @@
 # Capture/compare regression harness
 
-`regression-harness` · Task · enhancement · draft
+`regression-harness` · Task · enhancement
 
 ## Seen (operator, 2026-10-25)
 
