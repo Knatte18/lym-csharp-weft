@@ -1,6 +1,6 @@
 # Capture/compare regression harness
 
-`regression-harness` · Task · enhancement
+`regression-harness` · Task · enhancement · running · Worktree-Create
 
 ## Seen (operator, 2026-10-25)
 
