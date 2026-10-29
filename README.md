@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-10-29 10:21 UTC; every age below is as of then.
+Rendered 2026-10-29 10:23 UTC; every age below is as of then.
 Prime owner: `osl-1046`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -16,7 +16,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | darn | Code-Burler-Review | osl-1046 | 3m<br>3m |  |
+| T1 | **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | darn | Code-Burler-Fix | osl-1046 | 5m<br>5m |  |
 
 ### Ready (0)
 
