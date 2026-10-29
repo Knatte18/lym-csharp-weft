@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-10-29 10:25 UTC; every age below is as of then.
+Rendered 2026-10-29 10:26 UTC; every age below is as of then.
 Prime owner: `osl-1046`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -19,11 +19,3 @@ _None._
 ## Notes (0)
 
 Not tasks: ideas and observations, merged into a task when one is promoted.
-
-## Done (1)
-
-Finished, awaiting `lym board prune --apply`.
-
-| # | Entry | Slug | Age<br>Revised | Labels |
-| --- | --- | --- | --- | --- |
-| T1 | **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | 7m<br>7m |  |
