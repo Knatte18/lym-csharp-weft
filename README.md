@@ -16,7 +16,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | darn | Worktree-Create | osl-1046 | 0m<br>0m |  |
+| T1 | **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | darn | Drift-Baseline | osl-1046 | 0m<br>0m |  |
 
 ### Ready (0)
 
