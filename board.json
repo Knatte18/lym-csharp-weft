@@ -16,6 +16,7 @@
       "isolated": false,
       "brief": "ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep",
       "body": "## Goal\n\nAdd a Colebrook-White friction model to `LymCsharp.Hydraulics`, beside the Haaland and Swamee-Jain models, as the first end-to-end darn run on a C# repo.\n\n## Scope\n\n- `ColebrookFriction`, an `IFrictionModel`, solving the Colebrook-White equation iteratively with a fixed tolerance and an iteration cap.\n- Tests in `LymCsharp.Hydraulics.Tests` that compare it against the Haaland and Swamee-Jain models over the turbulent range, within a stated tolerance.\n- One test in the `Slow` category: a convergence sweep over a wide grid of Reynolds numbers and relative roughnesses.\n- Nothing in `LymCsharp.Regression`, `LymCsharp.Units` or `LymCsharp.Reporting`.\n\n## What the run proves\n\nThe plan in C# glyphs, Webster writing C#, and the gate running `dotnet test` with and without the `Slow` category, in a hub anchored in the `dotnet` subdirectory.\n",
+      "status": "running · Worktree-Create",
       "created": "2026-10-29T10:18:14Z",
       "revised": "2026-10-29T10:18:14Z"
     }
