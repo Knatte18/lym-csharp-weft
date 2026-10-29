@@ -1,6 +1,6 @@
 # Add a Colebrook-White friction model
 
-`friction-colebrook` · Task · enhancement · running · Drift-Baseline
+`friction-colebrook` · Task · enhancement · running · Darn-Write
 
 ## Goal
 
