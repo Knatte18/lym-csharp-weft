@@ -9,7 +9,7 @@
      twill_directive is a fourth optional marker, rendered by internal/twilldirective through internal/loomengine;
      it sits on the line that would otherwise be blank, so an empty value leaves the blank line and the prompt's bytes unchanged.
      edit_directive is a required marker, rendered unconditionally by internal/editdirective.
-lym-stencil: sha256=1736792b56a80fb99a53c61e168aff401743c5f974e2b1fc38ac65537166a160 build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+lym-stencil: sha256=400c30810de35c748e9d8cd8bcd36921eba608437e6f5175fe15a11275a6b2ee build=c49ba448cd942b81a5c9fe25553707a8279487d0 time=2026-10-29T10:06:41Z -->
 
 # Plan — read the decision record, write a plan-format flat-card plan
 
@@ -50,6 +50,7 @@ A follow-up a card files goes on the board as a note, never as a task, and no ca
 ## Step 2 — Explore the codebase
 
 Before planning, start from the code the relevant list names, then read the other relevant parts of the codebase: check recent commits, and follow existing patterns and any PATTERN entries in this prompt rather than inventing new ones.
+Issue every search and read you can name in one message; wait for a result only to choose the next call.
 
 ### Look up glyphs with `lym quarry` — never spell one from memory
 
@@ -94,6 +95,8 @@ The plan runs strictly in card order, and the Card Index lists the cards in that
 
 A card that needs a corpus or a fixture takes it from committed test data in the tree, created by an earlier card where it does not exist yet, never from the live files of other worktrees or the fabric repo.
 `card-fabric-reference` in `{{.specs_dir}}/loom/loom-plan-spec.md` names what the plan gate refuses.
+
+The plan gate also refuses a card for `test-tier-unstated`, `seam-test-unlisted` and `doc-go-unlisted`; `{{.specs_dir}}/loom/loom-plan-spec.md`'s validation checks hold their rules.
 
 A card that prescribes an addition to a `PATTERN.md` entry line leaves the line's rule text under the cap, `pattern-entry-line-cap` in the same spec: the gate fails a fenced verbatim entry line whose rule text is over it.
 A declared `adds` or `changes` entry is prescribed verbatim as its whole overview line in a fenced block on a card that edits `PATTERN.md`.

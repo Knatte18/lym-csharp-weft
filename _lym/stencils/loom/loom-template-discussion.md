@@ -12,7 +12,7 @@
      it sits on the line that would otherwise be blank, so an empty value leaves the blank line and the prompt's bytes unchanged.
      edit_directive is a required marker, rendered unconditionally by internal/editdirective.
      The literal `{` / `}` characters around {{.slug}} in the board-read example below are ordinary JSON punctuation, not template syntax — only `{{` begins a template action.
-lym-stencil: sha256=200c38599e16d7dad23b2e12be242586fee41d45a4f9c189068eac3210f38f5b build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+lym-stencil: sha256=b20e9d9b3d9e4046a42409aa135af7e22383fe8b0d826c8f6328563042834d70 build=c49ba448cd942b81a5c9fe25553707a8279487d0 time=2026-10-29T10:06:41Z -->
 
 # Discussion — interview, then write the decision record
 
@@ -52,6 +52,7 @@ Read each such note `lym board list` shows.
 
 Read the relevant parts of the codebase before asking the operator anything.
 Do not ask a question the codebase already answers — read the files and check recent commits.
+Issue every search and read you can name in one message; wait for a result only to choose the next call.
 Only unresolved design questions belong in the interview.
 
 This exploration is bounded, the same way Step 3's interview categories are: at a coarse level you MAY establish which module boundary the work falls under and whether the design conflicts with an existing pattern.
@@ -117,6 +118,7 @@ lym loom validate-discussion
 The verb takes no arguments.
 It exits 0 on a clean gate and 1 otherwise, and puts its findings under the failure envelope's `findings` key.
 Fix whatever it reports, then re-run it until it exits 0 before ending your turn.
+The gate also runs the decision-id, acceptance and citation checks that the decision record section of `{{.specs_dir}}/loom/loom-discussion-spec.md` states.
 A design change in that turn may update `{{.relevant_path}}` in the same turn.
 
 ## Never use `AskUserQuestion`

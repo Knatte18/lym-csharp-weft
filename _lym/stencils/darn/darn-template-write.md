@@ -7,7 +7,7 @@
      decision_record_path and support_log_path are required markers, naming the two discussion files the writer writes before any code.
      prior_work is never empty: DarnTable fills it with (none) when it has nothing to tell.
      edit_directive is a required marker, rendered unconditionally by internal/editdirective.
-lym-stencil: sha256=1b61953a680064a094de0801cf76761eea42b9eb9e5922c612c1f8659dda455c build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+lym-stencil: sha256=2b45457f36656670ca49c192fdd32255d6a616a6ed0727557b7b8aa8c669fb58 build=c49ba448cd942b81a5c9fe25553707a8279487d0 time=2026-10-29T10:06:41Z -->
 
 # Darn — make the change a board entry asks for, in one session
 
@@ -43,8 +43,8 @@ When `{{.decision_record_path}}` or `{{.support_log_path}}` is absent, or `lym l
 Check the entry before you write:
 
 - Read `lym board list`, every entry that touches the task and every board note titled `Decision for {{.slug}}:` for it, and `lym loom peers` for the runs in flight and the parent's commits since the fork.
-- When the entry is plainly outdated, because landed work overtook it or another board entry or run contradicts it, and no decision note answers it, send your parent a message by `SendMessage` naming what overtook or contradicts the entry.
-  Ask it to write its answer as a `Decision for {{.slug}}:` board note and then reply by `SendMessage`, since a note alone wakes nothing; then end your turn to wait.
+- When the entry is plainly outdated, because landed work overtook it or another board entry or run contradicts it, and no decision note answers it, send your parent a message with `lym creel post --parent --expect-reply "<text>"` naming what overtook or contradicts the entry.
+  Ask it to write its answer as a `Decision for {{.slug}}:` board note and then reply with `lym creel post --reply <id>`, since a note alone wakes nothing; then end your turn to wait.
   On any message from your parent, re-read the board for the note.
 - Write the answer into the decision record as a Decision citing the parent.
 - Once the record is committed, ask your parent to record the same answer with `lym loom decision add`.
@@ -72,7 +72,8 @@ A later spawn that finds both present and passing leaves them as they are.
 
 1. Edit the repository to make the change.
    Follow the existing patterns, and the PATTERN entries in this prompt.
-2. Test as you work with `lym gate test --wait`, which computes its scope from your changes, never a raw test command or a module-wide run.
+   Read every file the change touches, with the greps that find them, in one message before the first edit of each commit, and make independent edits in one message.
+2. Test with `lym gate test --wait` once, after the last edit of each commit, never after each edit; it computes its scope from your changes; never run a raw test command or a module-wide run.
 3. Update the docs the repository's `CLAUDE.md` names for your kind of change in the same commits as the code.
 4. Commit on the task branch in small, coherent commits, each leaving the tree green.
    Never push: the landing steps that follow push the branch.
