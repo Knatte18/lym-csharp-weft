@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-10-29 10:18 UTC; every age below is as of then.
+Rendered 2026-10-29 10:19 UTC; every age below is as of then.
 Prime owner: `osl-1046`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -10,19 +10,13 @@ An entry waits only on the open entries it names under After, so the entries in 
 
 Concrete and claimable; only a task can run.
 
-### Ready (0)
+### Ready (1)
 
 Waits on nothing open; can start now.
 
-_None._
-
-### Draft (1)
-
-Not released; nothing starts it until its status is cleared.
-
 | # | Task | Slug | Recipe | After | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- |
-| T1 | `draft` **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | darn |  | 0m<br>0m |  |
+| T1 | **Add a Colebrook-White friction model**<br>• ColebrookFriction beside Haaland and Swamee-Jain, with tests and one Slow convergence sweep | [`friction-colebrook`](design-friction-colebrook.md) | darn |  | 0m<br>0m |  |
 
 ## Notes (0)
 
