@@ -1,28 +1,33 @@
-# Add a Colebrook-White friction model
+# Add ColebrookFriction, an iterative Colebrook-White friction model
 
-Adds `ColebrookFriction`, an `IFrictionModel` in `LymCsharp.Hydraulics` beside `HaalandFriction` and `SwameeJainFriction`.
-It solves the implicit Colebrook-White equation instead of approximating it explicitly.
-
-## Behavior
-
-- Below Re 2300 it returns the laminar 64/Re, and a non-positive Reynolds number throws `ArgumentOutOfRangeException`, as the sibling models do.
-- Above that it iterates the fixed-point map `x = -2 log10(ε/3.7 + 2.51 x / Re)` on `x = 1/sqrt(f)`, starting from the Swamee-Jain estimate.
-  It stops when successive iterates differ by less than a relative 1e-12, which takes a handful of steps over the turbulent range.
-- When the iteration has not converged after 50 steps it throws `InvalidOperationException`, so it never loops unbounded and never returns an unconverged factor.
+`LymCsharp.Hydraulics` gains `ColebrookFriction`, an `IFrictionModel` that solves the Colebrook-White equation directly.
+It sits beside `HaalandFriction` and `SwameeJainFriction`, which only approximate that equation, and gives callers an implicit reference model for the same interface.
+`PipeFlowCalculator`'s default model, `IFrictionModel`, and the `Regression`, `Units` and `Reporting` projects are unchanged.
 
 ## Design decisions
 
-- The tolerance and iteration cap are private constants; no caller needs to tune them.
-- The model is not wired into `PipeFlowCalculator`, whose default stays Swamee-Jain.
-- `LymCsharp.Regression`, `LymCsharp.Units` and `LymCsharp.Reporting` are unchanged.
+- The laminar branch and input guard match the sibling models: below Re 2300 the factor is 64/Re, and a non-positive Reynolds number throws `ArgumentOutOfRangeException`. The three models stay interchangeable behind `IFrictionModel`.
+- The turbulent branch iterates a fixed point on `1/sqrt(f)`, starting from the Swamee-Jain estimate.
+  Convergence is a relative step of 1e-12 or less; the cap is 50 iterations.
+  Both are private constants, since no caller needs to tune them.
+- Hitting the cap throws `InvalidOperationException` instead of returning an unconverged factor, so a call is bounded and never returns a wrong value silently.
+  A NaN Reynolds number never satisfies the convergence comparison and so reaches this throw; `NonConvergingInputThrows` pins that.
+- The relative roughness is trusted as non-negative, as in the sibling models.
 
 ## Tests
 
 `ColebrookFrictionTests` covers:
 
-- the laminar branch and the non-positive-Reynolds guard;
-- that turbulent factors satisfy the Colebrook-White equation to a residual below 1e-9;
-- agreement with both Haaland and Swamee-Jain within 3 percent over Re 1e4 to 1e7 and relative roughness 0 to 0.01;
-- a `[Category("Slow")]` sweep over a logarithmic Re grid from 4000 to 1e8 and relative roughness 0 to 0.05, asserting convergence and the residual at every point.
+- the laminar factor and the non-positive Reynolds guard;
+- the cap-exhaustion throw;
+- the Colebrook-White residual below 1e-9 at representative turbulent points;
+- agreement with Haaland and with Swamee-Jain within 3 percent over Re 1e4 to 1e7 and relative roughness 0 to 0.01.
+  3 percent matches the existing Haaland-versus-Swamee-Jain test.
 
-Both gate tiers pass: tier 0 excludes the `Slow` category, and tier 1 runs only `Slow` tests.
+One `[Category("Slow")]` test, `ConvergesAcrossReynoldsAndRoughnessGrid`, sweeps a logarithmic Re grid from 4000 to 1e8 against relative roughness 0 to 0.05.
+It asserts the residual at every point, so a non-converging point fails through the throw and a wrong root fails through the residual.
+
+## To check by hand
+
+- Run the `Slow` category with `lym gate test` and confirm the sweep passes; it is the only check on the extremes of the grid (Re 1e8, roughness 0.05).
+- Behavior outside the swept grid, such as relative roughness above 0.05, is untested; it would throw rather than return a wrong factor.
