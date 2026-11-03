@@ -6,9 +6,19 @@
   "deferred": false,
   "waived_reason": "",
   "waived_at": "",
-  "accepted": null,
+  "accepted": [
+    {
+      "test": "water-pvc-2in-transitional-churchill",
+      "reason": "New regression case the task adds to RegressionCases.All to run a pipe flow through ChurchillFriction; the baseline at c84741f predates it, so every line reads as absent. The decision record and baseline report both expect this case as the one addition, and no existing case drifted.",
+      "by": "agent",
+      "ruling": "unruled",
+      "at": "2026-11-03T15:30:51Z"
+    }
+  ],
   "withdrawn": null,
-  "halt_named": null,
-  "halt_named_at": "",
+  "halt_named": [
+    "water-pvc-2in-transitional-churchill"
+  ],
+  "halt_named_at": "2026-11-03T15:31:11Z",
   "gate_halt_at": ""
 }
