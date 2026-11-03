@@ -1,6 +1,6 @@
 # Cache friction factors in PipeFlowCalculator
 
-`cached-friction-factor` · Task · enhancement · running · Drift-Recheck
+`cached-friction-factor` · Task · enhancement · running · Describe
 
 ## Goal
 
