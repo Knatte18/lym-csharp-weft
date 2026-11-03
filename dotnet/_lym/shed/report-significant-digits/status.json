@@ -1,12 +1,13 @@
 {
   "current_producer": "Drift-Await",
-  "state": "running",
-  "error": "",
+  "state": "blocked",
+  "error": "drift: the baseline capture ended failed (exit 0 but wrote no file to /home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/.lym/drift/baseline), log /home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/drift/logs/capture-20261103T160453.725Z.log; way forward: lym drift capture followed by lym loom resume, which captures again on the branch point and re-enters this row, or lym drift defer followed by lym loom resume, which goes on with regression deferred",
+  "entered_row": "Drift-Await",
   "pause_requested": false,
   "activity": {
     "now": "Drift-Await",
-    "last": "Drift-Baseline → done",
-    "wait": ""
+    "last": "Drift-Await → stuck",
+    "wait": "drift: the baseline capture ended failed (exit 0 but wrote no file to /home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/.lym/drift/baseline), log /home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/drift/logs/capture-20261103T160453.725Z.log; way forward: lym drift capture followed by lym loom resume, which captures again on the branch point and re-enters this row, or lym drift defer followed by lym loom resume, which goes on with regression deferred"
   },
   "history": [
     {
@@ -26,6 +27,13 @@
       "outcome": "done",
       "output": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/drift/baseline.md",
       "at": "2026-11-03T16:04:53Z"
+    },
+    {
+      "producer": "Drift-Await",
+      "outcome": "stuck",
+      "output": "",
+      "at": "2026-11-03T16:04:58Z",
+      "budget_exempt": true
     }
   ],
   "product": {
