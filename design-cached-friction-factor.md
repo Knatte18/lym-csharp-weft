@@ -1,6 +1,6 @@
 # Cache friction factors in PipeFlowCalculator
 
-`cached-friction-factor` · Task · enhancement · draft
+`cached-friction-factor` · Task · enhancement
 
 ## Goal
 
