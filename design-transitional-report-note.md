@@ -1,6 +1,6 @@
 # Note transitional flow in the pipe flow report
 
-`transitional-report-note` · Task · enhancement · running · Record-Write
+`transitional-report-note` · Task · enhancement · running · Drift-Baseline
 
 ## Goal
 
