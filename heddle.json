@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "slug": "orch-rules",
+      "text": "### Module dirs in this anchored hub (LoomYard #38)\n\nThe code anchor is `dotnet/`, and lym resolves a module's `dir` against different bases.\n`gate.yaml` tiers join `dir` onto the worktree root, so they keep `dir: dotnet`.\n`drift.yaml` capture and compare join `dir` onto the anchor, so they keep `dir: .`.\nKeep both until #38 is fixed, then remove this rule.\n",
+      "order": 1000,
+      "targets": [
+        "orch-prompt"
+      ]
+    }
+  ]
+}
