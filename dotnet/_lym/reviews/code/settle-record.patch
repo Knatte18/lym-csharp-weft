@@ -1,0 +1,39 @@
+diff --git a/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs b/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs
+index 2ffff95..3ac0cce 100644
+--- a/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs
++++ b/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs
+@@ -12,13 +12,18 @@ public static class ResultFormatter
+     /// <summary>
+     /// Renders the flow regime, velocity, Reynolds number and pressure drop in <paramref name="pressureUnit"/> as one line.
+     /// Every numeric value is rounded to 4 significant digits and printed without trailing zeros.
++    /// A transitional flow's line ends with the note " (transitional: friction factor uncertain)",
++    /// because no friction model is reliable between laminar and turbulent flow.
+     /// </summary>
+     public static string Format(PipeFlowResult result, IUnit pressureUnit)
+     {
+         var drop = new Quantity(result.PressureDropPascals, UnitCatalog.Pascal).ConvertTo(pressureUnit);
+-        return $"{result.Regime} flow, v = {FormatToSignificantDigits(result.VelocityMetresPerSecond)} m/s, "
+-               + $"Re = {FormatToSignificantDigits(result.Reynolds)}, "
+-               + $"dP = {FormatToSignificantDigits(drop.Value)} {drop.Unit.Symbol}";
++        var line = $"{result.Regime} flow, v = {FormatToSignificantDigits(result.VelocityMetresPerSecond)} m/s, "
++                   + $"Re = {FormatToSignificantDigits(result.Reynolds)}, "
++                   + $"dP = {FormatToSignificantDigits(drop.Value)} {drop.Unit.Symbol}";
++        return result.Regime == FlowRegime.Transitional
++            ? line + " (transitional: friction factor uncertain)"
++            : line;
+     }
+ 
+     // Fixed-point text, because interpolating a double prints exponent notation below 1e-4.
+diff --git a/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs b/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs
+index 5581280..9bc2b67 100644
+--- a/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs
++++ b/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs
+@@ -22,6 +22,8 @@ public class ResultFormatterTests
+         "Turbulent flow, v = 1.5 m/s, Re = 50000, dP = -123500 Pa")]
+     [TestCase(0.0, 0.0,FlowRegime.Laminar, 0.0, "Pa",
+         "Laminar flow, v = 0 m/s, Re = 0, dP = 0 Pa")]
++    [TestCase(0.05, 3000, FlowRegime.Transitional, 689.475729, "psi",
++        "Transitional flow, v = 0.05 m/s, Re = 3000, dP = 0.1 psi (transitional: friction factor uncertain)")]
+     public void FormatsEveryValueToFourSignificantDigits(
+         double velocity, double reynolds, FlowRegime regime, double pressureDropPascals, string pressureSymbol,
+         string expected)
