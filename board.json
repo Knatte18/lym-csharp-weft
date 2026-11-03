@@ -64,6 +64,27 @@
       "created": "2026-11-03T14:16:22Z",
       "revised": "2026-11-03T14:16:27Z",
       "profile": "light"
+    },
+    {
+      "id": 3,
+      "handle": "T4",
+      "slug": "adopt-fix-root-t1",
+      "title": "Fix the adopt check of root on neve",
+      "kind": "task",
+      "labels": [
+        "bug"
+      ],
+      "issues": [],
+      "recipe": "darn",
+      "depends_on": [],
+      "isolated": false,
+      "brief": "",
+      "body": "The adopt check of root failed on this machine: tier0.\n\nDiagnose the failure first. A code failure you fix and land as usual. A machine failure, such as a missing tool, an old version or timing like a security agent holding new binaries, has nothing to commit.\n\nStop condition: the failure is a machine failure. Write a stop report naming the exact steps the operator must take on this machine and, as its way forward, a re-run of lym adopt root once the machine is settled, never lym loom resume.\n",
+      "created": "2026-11-03T14:25:53Z",
+      "revised": "2026-11-03T14:25:53Z",
+      "profile": "light",
+      "front": true,
+      "on_land": "adopt-check"
     }
   ],
   "prime_owner": "neve",
