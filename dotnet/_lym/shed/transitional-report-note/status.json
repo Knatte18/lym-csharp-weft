@@ -1,12 +1,13 @@
 {
   "current_producer": "Drift-Verify",
-  "state": "running",
-  "error": "",
+  "state": "blocked",
+  "error": "decision halt: drift verify halt: the Drift-Verify agent accepted drift that only the run's parent may rule on; the agent's acceptances awaiting the parent's ruling: water-pvc-2in-transitional, water-pvc-2in-transitional-churchill; for them: lym loom resume to stand by them, after any lym drift accept of your own, or lym drift withdraw \u003ctest\u003e followed by lym loom resume to reject one",
+  "entered_row": "Drift-Verify",
   "pause_requested": false,
   "activity": {
     "now": "Drift-Verify",
-    "last": "Darn-Write → done",
-    "wait": ""
+    "last": "Drift-Verify → stuck",
+    "wait": "decision halt: drift verify halt: the Drift-Verify agent accepted drift that only the run's parent may rule on; the agent's acceptances awaiting the parent's ruling: water-pvc-2in-transitional, water-pvc-2in-transitional-churchill; for them: lym loom resume to stand by them, after any lym drift accept of your own, or lym drift withdraw \u003ctest\u003e followed by lym loom resume to reject one"
   },
   "history": [
     {
@@ -59,6 +60,34 @@
           "end": "2026-11-03T19:31:51.528559527Z"
         }
       ]
+    },
+    {
+      "producer": "Drift-Verify",
+      "outcome": "stuck",
+      "output": "/home/knatte/Code/lym-csharp-LYMHUB/transitional-report-note/dotnet/_lym/drift/verify-report.md",
+      "at": "2026-11-03T19:32:33Z",
+      "gate_attempts": 0,
+      "gate_spans": [
+        {
+          "gate": "dirty",
+          "kind": "gate",
+          "start": "2026-11-03T19:32:30.502707292Z",
+          "end": "2026-11-03T19:32:30.504598259Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-11-03T19:32:30.557353621Z",
+          "end": "2026-11-03T19:32:30.557680763Z"
+        },
+        {
+          "gate": "compare",
+          "kind": "gate",
+          "start": "2026-11-03T19:32:30.600617232Z",
+          "end": "2026-11-03T19:32:33.384046441Z"
+        }
+      ],
+      "budget_exempt": true
     }
   ],
   "product": {
