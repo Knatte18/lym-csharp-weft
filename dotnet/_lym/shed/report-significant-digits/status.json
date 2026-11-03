@@ -1,14 +1,14 @@
 {
   "current_producer": "Drift-Verify",
-  "state": "blocked",
-  "error": "decision halt: drift verify halt: the Drift-Verify agent accepted drift that only the run's parent may rule on; the agent's acceptances awaiting the parent's ruling: water-steel-dn100-swamee-jain, water-steel-dn100-haaland, oil-steel-dn100-laminar, water-pvc-2in-transitional, water-pvc-2in-transitional-churchill; for them: lym loom resume to stand by them, after any lym drift accept of your own, or lym drift withdraw \u003ctest\u003e followed by lym loom resume to reject one",
+  "state": "running",
+  "error": "",
   "pending_by": "shed",
   "entered_row": "Drift-Verify",
   "pause_requested": false,
   "activity": {
     "now": "Drift-Verify",
     "last": "Drift-Verify → stuck",
-    "wait": "decision halt: drift verify halt: the Drift-Verify agent accepted drift that only the run's parent may rule on; the agent's acceptances awaiting the parent's ruling: water-steel-dn100-swamee-jain, water-steel-dn100-haaland, oil-steel-dn100-laminar, water-pvc-2in-transitional, water-pvc-2in-transitional-churchill; for them: lym loom resume to stand by them, after any lym drift accept of your own, or lym drift withdraw \u003ctest\u003e followed by lym loom resume to reject one"
+    "wait": ""
   },
   "history": [
     {
