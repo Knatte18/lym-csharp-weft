@@ -1,6 +1,6 @@
 # Add Quantity.Parse
 
-`quantity-parse` · Task · enhancement
+`quantity-parse` · Task · enhancement · running · Record-Write
 
 ## Goal
 
