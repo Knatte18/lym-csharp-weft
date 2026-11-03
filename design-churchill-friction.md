@@ -1,6 +1,6 @@
 # Add ChurchillFriction, one friction model valid across every flow regime
 
-`churchill-friction` · Task · enhancement · blocked · Drift-Verify
+`churchill-friction` · Task · enhancement · running · Drift-Verify
 
 The friction models (`SwameeJainFriction`, `HaalandFriction`, `ColebrookFriction`) cover turbulent flow only.
 
