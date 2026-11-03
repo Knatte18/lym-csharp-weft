@@ -5,7 +5,7 @@
   "pause_requested": false,
   "activity": {
     "now": "Run-Shed",
-    "last": "Open-IDE → skipped",
+    "last": "Run-Shed → bounced to Run-Shed",
     "wait": ""
   },
   "history": [
@@ -44,6 +44,24 @@
       "output": "",
       "at": "2026-11-03T15:28:02Z",
       "reason": "batten.open_ide = false",
+      "machine": "neve"
+    },
+    {
+      "producer": "Run-Shed",
+      "outcome": "stuck",
+      "output": "child running → blocked at Drift-Verify",
+      "at": "2026-11-03T15:31:14Z",
+      "budget_exempt": true,
+      "routed_to": "Run-Shed",
+      "machine": "neve"
+    },
+    {
+      "producer": "Run-Shed",
+      "outcome": "stuck",
+      "output": "child blocked → running at Drift-Verify",
+      "at": "2026-11-03T15:31:58Z",
+      "budget_exempt": true,
+      "routed_to": "Run-Shed",
       "machine": "neve"
     }
   ]
