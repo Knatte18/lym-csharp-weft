@@ -6,14 +6,32 @@
   "deferred": false,
   "waived_reason": "",
   "waived_at": "",
-  "accepted": null,
+  "accepted": [
+    {
+      "test": "water-pvc-2in-transitional",
+      "reason": "Task intends the report line of transitional cases to gain the ' (transitional: friction factor uncertain)' note; only that line moved and the appended text matches the decision record exactly.",
+      "by": "agent",
+      "ruling": "unruled",
+      "at": "2026-11-03T19:32:14Z"
+    },
+    {
+      "test": "water-pvc-2in-transitional-churchill",
+      "reason": "Task intends the report line of transitional cases to gain the ' (transitional: friction factor uncertain)' note; only that line moved and the appended text matches the decision record exactly.",
+      "by": "agent",
+      "ruling": "unruled",
+      "at": "2026-11-03T19:32:14Z"
+    }
+  ],
   "withdrawn": null,
-  "halt_named": null,
-  "halt_named_at": "",
+  "halt_named": [
+    "water-pvc-2in-transitional",
+    "water-pvc-2in-transitional-churchill"
+  ],
+  "halt_named_at": "2026-11-03T19:32:33Z",
   "gate_halt_at": "",
-  "baseline_head": "",
-  "compared_head": "",
-  "compared_at": "",
-  "compare_passed": false,
+  "baseline_head": "fd21ddaf13ddde81ab93b4863381f770e8a71df9",
+  "compared_head": "6b1db614994ec11d1cbe087911cbaf49fc56352c",
+  "compared_at": "2026-11-03T19:32:33Z",
+  "compare_passed": true,
   "accepted_profile_head": ""
 }

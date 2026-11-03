@@ -1,0 +1,2 @@
+drift: water-pvc-2in-transitional line 12: baseline "report = Transitional flow, v = 0.05921 m/s, Re = 3002, dP = 0.006776 psi", current "report = Transitional flow, v = 0.05921 m/s, Re = 3002, dP = 0.006776 psi (transitional: friction factor uncertain)"
+drift: water-pvc-2in-transitional-churchill line 12: baseline "report = Transitional flow, v = 0.05921 m/s, Re = 3002, dP = 0.006546 psi", current "report = Transitional flow, v = 0.05921 m/s, Re = 3002, dP = 0.006546 psi (transitional: friction factor uncertain)"
