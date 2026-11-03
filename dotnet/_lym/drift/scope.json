@@ -11,9 +11,9 @@
   "halt_named": null,
   "halt_named_at": "",
   "gate_halt_at": "",
-  "baseline_head": "",
-  "compared_head": "",
-  "compared_at": "",
-  "compare_passed": false,
+  "baseline_head": "99a49ce3c4cf06ff0017d981fa4a4b81e9e508fd",
+  "compared_head": "80e63c903ae88bd0e0d5639d979aece3d46021c4",
+  "compared_at": "2026-11-03T19:18:12Z",
+  "compare_passed": true,
   "accepted_profile_head": ""
 }
