@@ -1,11 +1,11 @@
 {
-  "current_producer": "Darn-Write",
+  "current_producer": "Drift-Verify",
   "state": "running",
   "error": "",
   "pause_requested": false,
   "activity": {
-    "now": "Darn-Write",
-    "last": "Drift-Await → done",
+    "now": "Drift-Verify",
+    "last": "Darn-Write → done",
     "wait": ""
   },
   "history": [
@@ -40,6 +40,33 @@
       "output": "",
       "at": "2026-11-03T14:28:51Z",
       "by": "shed"
+    },
+    {
+      "producer": "Darn-Write",
+      "outcome": "done",
+      "output": "/home/knatte/Code/lym-csharp-LYMHUB/pipeflow-reynolds-helper/dotnet/_lym/landing/summary.md",
+      "at": "2026-11-03T14:30:06Z",
+      "gate_attempts": 0,
+      "gate_spans": [
+        {
+          "gate": "clean",
+          "kind": "gate",
+          "start": "2026-11-03T14:29:58.186320869Z",
+          "end": "2026-11-03T14:29:58.187621171Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-11-03T14:29:58.232732881Z",
+          "end": "2026-11-03T14:30:05.480643783Z"
+        },
+        {
+          "gate": "description",
+          "kind": "gate",
+          "start": "2026-11-03T14:30:05.520209811Z",
+          "end": "2026-11-03T14:30:05.521719194Z"
+        }
+      ]
     }
   ],
   "product": {
