@@ -16,7 +16,6 @@
       "isolated": false,
       "brief": "Read a quantity back from the text Quantity.ToString writes",
       "body": "## Goal\n\nLet callers read a quantity back from the text `Quantity.ToString` writes, such as `7.2 l/min` or `1.5 bar`, so a flow or pressure can come from a config file or a command line.\n\n## Change\n\n- Add `public static Quantity Parse(string text)` to `Quantity` in `dotnet/src/LymCsharp.Units/Quantity.cs`.\n  - It reads a number, one space and a unit symbol, the form `Quantity.ToString` writes.\n  - It looks the symbol up through `UnitRegistry.Find`, so an unknown symbol throws `KeyNotFoundException` as `Find` does.\n  - Text with no space in it throws `FormatException`.\n- Nothing else changes: no caller uses `Parse` yet, and no calculation or report output moves.\n\n## Tests\n\nAdd to `dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs`:\n\n- `Parse(\"1.5 bar\")` gives the value 1.5 in `UnitCatalog.Bar`;\n- `Parse(\"7.2 l/min\")` gives the value 7.2 in `UnitCatalog.LitrePerMinute`;\n- `Parse(q.ToString())` gives back `q` for a quantity such as 3.25 psi;\n- an unknown symbol throws `KeyNotFoundException`;\n- text with no space throws `FormatException`.\n",
-      "status": "running · Worktree-Create",
       "created": "2026-11-03T18:44:45Z",
       "revised": "2026-11-03T18:44:45Z",
       "profile": "light"

@@ -1,6 +1,6 @@
 # Add Quantity.Parse
 
-`quantity-parse` · Task · enhancement · running · Worktree-Create
+`quantity-parse` · Task · enhancement
 
 ## Goal
 
