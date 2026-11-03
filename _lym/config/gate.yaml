@@ -1,20 +1,41 @@
 tiers:
     tier0:
         about: "fast tests, Slow category excluded"
-        command: "dotnet test LymCsharp.sln --filter \"Category!=Slow\" {args}"
+        command: "dotnet test {targets} --no-build {filter} {args}"
+        all_targets: "LymCsharp.sln"
         counter: vstest
+        shared_build: true
+        filter: "Category!=Slow"
         timeout_min: 10
         dir: dotnet
     tier1:
         about: "slow tests"
-        command: "dotnet test LymCsharp.sln --filter Category=Slow {args}"
+        command: "dotnet test {targets} --no-build {filter} {args}"
+        all_targets: "LymCsharp.sln"
         counter: vstest
+        shared_build: true
+        filter: "Category=Slow"
         timeout_min: 30
         dir: dotnet
 gates:
-    webster: {tiers: [0, 1], scope: all}
+    webster:
+        tiers: [0]
+        scope: diff
     parent-align: {tiers: [0, 1], scope: all}
     finalize: {tiers: [0, 1], scope: all}
     adopt: {tiers: [0, 1], scope: all}
-    darn-write: {tiers: [0, 1], scope: diff}
-    code-burler-fix: {tiers: [0, 1], scope: diff}
+    darn-write:
+        tiers: [0]
+        scope: diff
+    code-burler-fix:
+        tiers: [0]
+        scope: diff
+    drift-verify:
+        tiers: [0]
+        scope: diff
+scoper: dotnet
+build:
+    about: "build the solution"
+    command: "dotnet build LymCsharp.sln -m"
+    dir: dotnet
+    timeout_min: 15
