@@ -1,0 +1,20 @@
+{
+  "number": 1,
+  "stop_key": {
+    "current_producer": "Drift-Await",
+    "history_length": 4,
+    "state": "blocked"
+  },
+  "pause_before": "",
+  "pause_after": "",
+  "snapshot": {
+    "head": "7f50ffe54fb60d0d0a1fd2d9098d42e61274bc31",
+    "branch": "pipeflow-reynolds-helper",
+    "dirty": {}
+  },
+  "spawned_at": "2026-11-03T15:28:02.564344418+01:00",
+  "deadline": "2026-11-03T15:38:02.564344418+01:00",
+  "envelope_path": "/home/knatte/Code/lym-csharp-LYMHUB/pipeflow-reynolds-helper/dotnet/_lym/shed/pipeflow-reynolds-helper/drive-reports/drive-envelope-20261103-152802-01e0.json",
+  "report_path": "/home/knatte/Code/lym-csharp-LYMHUB/pipeflow-reynolds-helper/dotnet/_lym/shed/pipeflow-reynolds-helper/drive-reports/drive-report-20261103-152802-3104.md",
+  "strand_guid": "f50380fd5c2054a2fa83150f8a362f71"
+}

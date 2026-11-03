@@ -1,0 +1,16 @@
+verdict: hand-back
+reason: >-
+  The Drift-Await row stopped because the drift capture command could not start.
+  The capture child ran in the working directory `dotnet/dotnet`, which does not exist
+  (`ls` confirms; the real directory is `dotnet/`). Go reports a failed chdir as
+  "fork/exec /usr/bin/sh: no such file or directory", so the error names the shell,
+  but `/usr/bin/sh` exists now (symlink to dash). The shell path is not the cause.
+  A plain re-launch would start in the same missing directory and fail again, so resume does not settle it.
+  The fix is either to correct the directory the drift capture runs in, then `lym drift capture` and resume,
+  or to defer regression for this run, which is a scope choice for the run's parent.
+  I could not find where the capture directory is configured: no drift config in the repo's yaml, json or toml files.
+question: >-
+  The drift baseline capture runs in `dotnet/dotnet`, which does not exist. Which do you want:
+  (1) Correct the capture directory to `dotnet/`, then run `lym drift capture` and `lym loom resume`, so regression is captured.
+  (2) Run `lym drift defer` and `lym loom resume`, so the run goes on with regression deferred.
+  Also, if you choose (1), name where the capture directory is configured, since I could not find it in the repo.
