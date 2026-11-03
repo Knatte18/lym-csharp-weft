@@ -1,6 +1,6 @@
 # Note transitional flow in the pipe flow report
 
-`transitional-report-note` · Task · enhancement · running · Finalize
+`transitional-report-note` · Task · enhancement · done
 
 ## Goal
 
