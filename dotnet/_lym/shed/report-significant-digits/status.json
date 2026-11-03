@@ -1,9 +1,9 @@
 {
   "current_producer": "Drift-Await",
-  "state": "paused",
+  "state": "running",
   "error": "",
+  "entered_row": "Drift-Await",
   "pause_requested": false,
-  "pause_reason": "re-launched onto Drift-Await",
   "activity": {
     "now": "Drift-Await",
     "last": "Drift-Await → goto",

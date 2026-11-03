@@ -1,0 +1,20 @@
+{
+  "number": 2,
+  "stop_key": {
+    "current_producer": "Drift-Await",
+    "history_length": 6,
+    "state": "blocked"
+  },
+  "pause_before": "",
+  "pause_after": "",
+  "snapshot": {
+    "head": "9017f2da38696ffab899e7ff08b3fb9c4ada5df9",
+    "branch": "report-significant-digits",
+    "dirty": {}
+  },
+  "spawned_at": "2026-11-03T17:05:35.144781166+01:00",
+  "deadline": "2026-11-03T17:15:35.144781166+01:00",
+  "envelope_path": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/shed/report-significant-digits/drive-reports/drive-envelope-20261103-170535-f355.json",
+  "report_path": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/shed/report-significant-digits/drive-reports/drive-report-20261103-170535-b780.md",
+  "strand_guid": "bef2103f0d8811e405e8bffee9dbb132"
+}

@@ -1,0 +1,12 @@
+{
+  "verdict": "resume",
+  "reason": "The stop's cause has been repaired since the stop, so re-entering Drift-Await is safe.\nCause: the 16:04:53Z capture ran with a skip list naming all six regression cases\n(water-steel-dn100-swamee-jain, water-steel-dn100-haaland, oil-steel-dn100-laminar,\nwater-pvc-2in-transitional, oil-steel-6in-turbulent, water-pvc-2in-transitional-churchill),\nwhich is every case in the suite. The harness had nothing to capture, exited 0 and wrote\nno file, and its logs are empty.\nRepair, made by another session after the stop (trace logs in .lym/logs, 16:32Z to 16:33Z):\nthe scope was re-recorded at 16:32:25Z as full with no skip (_lym/drift/scope.json), and\nskip.txt is now empty. A capture at 16:32:25Z failed with exit 1 because it ran from the\nhub root instead of dotnet/ (\"The provided file path does not exist: src/LymCsharp.Regression\").\nThe capture at 16:33:37Z ran from dotnet/ and passed with exit 0 (.lym/drift/capture.json,\nstate passed, skip null). .lym/drift/baseline now holds all six cases, each with\nrendered output.\nThe capture's head 9017f2da is the merge-base of HEAD and main, so it is the branch point.\nlym loom status still shows the run blocked at Drift-Await with history length 6, so the\nresumes run after the capture did not move it. A re-launch that re-enters Drift-Await should\nfind the passed capture and go on to Darn-Write. I ran no repair verb, because none applies to a\ndrift stop and the drift state needs none.",
+  "question": "",
+  "goto": "Drift-Await",
+  "verbs": [],
+  "cause": "",
+  "attempt": 1,
+  "attempt_dir": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/shed/report-significant-digits/arbiter/attempt-1",
+  "verdict_path": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/shed/report-significant-digits/arbiter/attempt-1/verdict.yaml",
+  "relaunch": "lym shed step report-significant-digits --until-stop --arbiter-attempt 1"
+}

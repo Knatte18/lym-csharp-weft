@@ -1,0 +1,5 @@
+verdict: escalate
+reason: >-
+  The drift capture exited 0 in about 3 seconds, wrote no baseline file, and left both capture logs and the step stderr empty.
+  The cause is not named from what I read, and the two ways forward (re-capture or defer the regression) are a judgment the next judge should make with the case brief.
+  Details and pointers are in case-brief.md.
