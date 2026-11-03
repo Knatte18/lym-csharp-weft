@@ -1,1 +1,9 @@
-# This file holds the hub's tuned values over lym's template.
+enabled: true
+capture:
+    command: "dotnet run --project src/LymCsharp.Regression -- capture {baseline_dir} --skip-file {skip_file}"
+    dir: dotnet
+    timeout_min: 15
+compare:
+    command: "dotnet run --project src/LymCsharp.Regression -- compare {baseline_dir} --skip-file {skip_file}"
+    dir: dotnet
+    timeout_min: 15
