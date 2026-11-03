@@ -1,9 +1,9 @@
 enabled: true
 capture:
     command: "dotnet run --project src/LymCsharp.Regression -- capture {baseline_dir} --skip-file {skip_file}"
-    dir: .
+    dir: dotnet
     timeout_min: 15
 compare:
     command: "dotnet run --project src/LymCsharp.Regression -- compare {baseline_dir} --skip-file {skip_file}"
-    dir: .
+    dir: dotnet
     timeout_min: 15
