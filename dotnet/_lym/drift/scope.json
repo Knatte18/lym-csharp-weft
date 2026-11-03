@@ -11,46 +11,40 @@
       "test": "water-steel-dn100-swamee-jain",
       "reason": "Only the report line changed, as the task intends: values now print to 4 significant digits (Re 127069 -\u003e 127100, dP 7925.267 Pa -\u003e 7925 Pa); raw lines 1-11 match the baseline.",
       "by": "agent",
-      "ruling": "unruled",
+      "ruling": "ruled",
       "at": "2026-11-03T16:37:41Z"
     },
     {
       "test": "water-steel-dn100-haaland",
       "reason": "Only the report line changed, as the task intends: values now print to 4 significant digits (Re 127069 -\u003e 127100, dP 0.078 -\u003e 0.07793 bar); raw lines 1-11 match the baseline.",
       "by": "agent",
-      "ruling": "unruled",
+      "ruling": "ruled",
       "at": "2026-11-03T16:37:41Z"
     },
     {
       "test": "oil-steel-dn100-laminar",
       "reason": "Only the report line changed, as the task intends: values now print to 4 significant digits (v 0.013 -\u003e 0.01273, Re 22 -\u003e 22.15, dP 0.102 -\u003e 0.1019 kPa); raw lines 1-11 match the baseline.",
       "by": "agent",
-      "ruling": "unruled",
+      "ruling": "ruled",
       "at": "2026-11-03T16:37:41Z"
     },
     {
       "test": "water-pvc-2in-transitional",
       "reason": "Only the report line changed, as the task intends: values now print to 4 significant digits (v 0.059 -\u003e 0.05921, dP 0.007 -\u003e 0.006776 psi); raw lines 1-11 match the baseline.",
       "by": "agent",
-      "ruling": "unruled",
+      "ruling": "ruled",
       "at": "2026-11-03T16:37:41Z"
     },
     {
       "test": "water-pvc-2in-transitional-churchill",
       "reason": "Only the report line changed, as the task intends: values now print to 4 significant digits (v 0.059 -\u003e 0.05921, dP 0.007 -\u003e 0.006546 psi); raw lines 1-11 match the baseline.",
       "by": "agent",
-      "ruling": "unruled",
+      "ruling": "ruled",
       "at": "2026-11-03T16:37:41Z"
     }
   ],
   "withdrawn": null,
-  "halt_named": [
-    "water-steel-dn100-swamee-jain",
-    "water-steel-dn100-haaland",
-    "oil-steel-dn100-laminar",
-    "water-pvc-2in-transitional",
-    "water-pvc-2in-transitional-churchill"
-  ],
-  "halt_named_at": "2026-11-03T16:38:04Z",
+  "halt_named": null,
+  "halt_named_at": "",
   "gate_halt_at": ""
 }
