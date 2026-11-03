@@ -1,11 +1,11 @@
 {
-  "current_producer": "Describe",
+  "current_producer": "PR-Review",
   "state": "running",
   "error": "",
   "pause_requested": false,
   "activity": {
-    "now": "Describe",
-    "last": "Drift-Recheck → done",
+    "now": "PR-Review",
+    "last": "Describe → done",
     "wait": ""
   },
   "history": [
@@ -124,6 +124,21 @@
       "outcome": "done",
       "output": "",
       "at": "2026-11-03T19:23:23Z"
+    },
+    {
+      "producer": "Describe",
+      "outcome": "done",
+      "output": "/home/knatte/Code/lym-csharp-LYMHUB/quantity-parse/dotnet/_lym/landing/summary.md",
+      "at": "2026-11-03T19:23:52Z",
+      "gate_attempts": 0,
+      "gate_spans": [
+        {
+          "gate": "description",
+          "kind": "gate",
+          "start": "2026-11-03T19:23:51.562244572Z",
+          "end": "2026-11-03T19:23:51.562285308Z"
+        }
+      ]
     }
   ],
   "product": {
