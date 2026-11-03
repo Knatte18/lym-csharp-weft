@@ -1,0 +1,1 @@
+time=2026-11-03T15:28:02.264+01:00 level=WARN msg="drift: the capture child ended with an error" trace=116b1a974eb10dc8 error="drift: start the drift capture command in /home/knatte/Code/lym-csharp-LYMHUB/pipeflow-reynolds-helper/dotnet/dotnet: fork/exec /usr/bin/sh: no such file or directory"
