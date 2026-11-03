@@ -16,7 +16,7 @@
       "isolated": false,
       "brief": "",
       "body": "`PipeFlowCalculator.Calculate` (`src/LymCsharp.Hydraulics/PipeFlow.cs`) computes the Reynolds number inline.\n\n## Expected\n\n- A public static `PipeFlowCalculator.Reynolds(Pipe, Fluid, Quantity flow)` computes it, and `Calculate` calls it.\n- Every result `Calculate` returns is unchanged to the last digit, so the regression harness reports no drift.\n- A test pins `Reynolds` for one laminar and one turbulent flow.\n\n## Why\n\nA behavior-preserving refactor: this run proves that Drift captures a baseline and compares clean on a hub whose anchor is `dotnet/`.\n",
-      "status": "running · PR-Review",
+      "status": "running · Finalize",
       "created": "2026-11-03T14:16:22Z",
       "revised": "2026-11-03T14:16:22Z",
       "profile": "light"
