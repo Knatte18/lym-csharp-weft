@@ -6,7 +6,7 @@
      internal/stencil's StripLeadingComment removes this leading comment before either consumer ever
      sees it.
      Among those markers, gate_tiers is filled by ReadRubric from the hub's gate.yaml tiers and gate lists, or none.
-lym-stencil: sha256=814c9f51d765ab5113881676b61afc6ddecae5f319dda487198e48804120c904 build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+lym-stencil: sha256=056fb2ce3ae6c1d63d3978ce7fda4f0ad8bab26ee5890c83c0e1573337198bc5 build=41cf1fcacc85e69648809274b967a7dbccc4e674 time=2026-11-03T13:14:57Z -->
 
 # Plan-Review rubric
 
@@ -14,8 +14,8 @@ The subject under review is the current plan: `_lym/plan/00-overview.md` and the
 The plan directory may also hold `archive-*/` subdirectories, which are rotations of superseded plans;
 they are out of scope, and a finding raised against one is never legitimate.
 
-The format contract, and the Card model it implements, are both `{{.specs_dir}}/loom/loom-plan-spec.md`.
-This rubric points at both and restates neither.
+The format contract, and the Card model it implements, are both `{{.specs_dir}}/loom/loom-plan-spec.md`, and `{{.specs_dir}}/loom/loom-plan-checks-spec.md` lists the contract's validation checks.
+This rubric points at them and restates neither.
 The mechanical checks over that contract are already enforced by this round's own gate over this round's own output — every check but `plan-unapproved` and `delete-target-gone` — while `plan-unapproved` is enforced at no row at all, resting on the review segment's own approve seam failing loudly if ever wired nil, and `delete-target-gone` fires only at Webster's dispatch, after this round.
 
 `Plan-Review` is the LLM producer, not the mechanical one — over-flagging is a judgment failure mode a mechanical producer, which has only checks and never judgment, cannot exhibit.
@@ -39,7 +39,7 @@ A fix inserts or removes a card only with `lym loom insert-card` or `lym loom re
 Do not flag any of the following as a finding:
 
 - **Anything this round's own gate already checks.**
-  Every check ID `{{.specs_dir}}/loom/loom-plan-spec.md`'s own validation-checks section lists is enforced deterministically by this round's own gate over this round's own output, except `plan-unapproved`, which is enforced at no row at all, resting on the review segment's own approve seam failing loudly if ever wired nil, and `delete-target-gone`.
+  Every check ID `{{.specs_dir}}/loom/loom-plan-checks-spec.md` lists is enforced deterministically by this round's own gate over this round's own output, except `plan-unapproved`, which is enforced at no row at all, resting on the review segment's own approve seam failing loudly if ever wired nil, and `delete-target-gone`.
   `delete-target-gone` fires only at Webster's dispatch, after this round, so no plan this round reviews can carry it.
   Re-deriving any of them here is duplicated work whose only possible outcome is disagreement with the gate.
 - **A missing `DependsOn`/`Produces` field, or an incomplete dependency list.**
@@ -47,7 +47,7 @@ Do not flag any of the following as a finding:
   Plan-time completeness of that intersection is explicitly not provable;
   the real gate is the post-merge build and test.
 - **A `Rename`, `Move`, `Prosa`, or `Custom` card carrying no `ImpactSummary`.**
-  It is required for `Edit` and `Delete` only, per the per-type table in `{{.specs_dir}}/loom/loom-plan-spec.md`.
+  It is required for `Edit`, `Extends` and `Delete` only, per the per-type table in `{{.specs_dir}}/loom/loom-plan-spec.md`.
   For `Rename` the reason is specific: a correctly executed AST-aware rename is binary, with no graded blast radius to summarise.
 
 ## Also flag
@@ -57,9 +57,13 @@ Do not flag any of the following as a finding:
   A private supporting type, or a constructor inseparable from its type, belongs in the other symbol's card;
   a symbol that is part of a module's public surface, or reused across packages, gets its own card even when one card is its only consumer, and a helper serving one surface is bundled into that surface's card.
 - **Test economy.**
-  A card that plans a new test function or file for behavior an existing test already covers, or one test per symbol, is a finding; so is a card that plans an assertion on a stencil's static prose.
+  A card that plans a new test function or file for behavior an existing test already covers, or one test per symbol, is a finding; so is a card that plans a test asserting the static prose of a stencil, spec, doc or other text.
   The finding names the existing test that covers the behavior, or, for a per-symbol test, the public-surface test that covers the symbol;
   a vague "seems redundant" is not a finding.
+  An acceptance criterion about wording in such text, whether or not its bullet opens with `Review:`, is met by the code review reading the text:
+  a card plans no test for it, a card that does is a finding whose fix cuts the test, and a criterion of that kind with no planned test is never a finding.
+  Before a finding relies on a claim, the plan's or the reviewer's own, that an existing scan or test already covers a wording, the reviewer reads that scan or test in the code and confirms it checks that wording;
+  an unconfirmed claim grounds no finding that cuts a test.
 - **Member glyphs on an `Edit` card.**
   An `Edit` card whose targets are only source file paths (`.go` or `.cs`) of non-test files while its `Intent` names specific symbols is a finding; the finding names the member glyphs to list instead.
 - **The re-sign arrow.**
@@ -119,12 +123,12 @@ Do not flag any of the following as a finding:
   A propagated raw I/O error, which `refusal-spec.md` exempts as transient, is exempt, and so is a fail-loud wiring guard in that file's sense, which takes no reaching test.
   A test that calls only the refusal's error constructor does not reach the refusal.
 - **The writer/reviewer symmetry note.**
-  The plan writer's own stencil is `{{.stencils_dir}}/loom/loom-template-plan.md`.
+  The plan writer's own stencil is `{{.stencils_dir}}/loom/loom-template-plan.md`, which includes the plan-format blocks `{{.stencils_dir}}/loom/loom-block-plan-format.md`, `{{.stencils_dir}}/loom/loom-block-plan-overview.md` and `{{.stencils_dir}}/loom/loom-block-plan-cards.md`.
   Whatever it says not to write, this rubric must not flag as missing.
 
 ## Proposed fixes
 
-A finding whose fix adds, drops, moves or pairs targets, or changes a verify command, proposes only a fix that every check in the validation-checks section of `{{.specs_dir}}/loom/loom-plan-spec.md` admits.
+A finding whose fix adds, drops, moves or pairs targets, or changes a verify command, proposes only a fix that every check in `{{.specs_dir}}/loom/loom-plan-checks-spec.md` admits.
 A fix that adds or pairs targets must pass `redundant-package-target` and `redundant-file-target` there, since a file or a package listed beside a member of it on one card is refused, and the spec says what counts and the way forward.
 When the reviewer sees no admissible fix, it still reports the defect and names the check that constrains the fix.
 A finding's `fix` key is a proposal: the fixer may apply any other fix the checks admit, and when none exists it defers the finding with the constraining check as the reason.
