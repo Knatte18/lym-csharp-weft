@@ -1,0 +1,93 @@
+diff --git a/dotnet/src/LymCsharp.Hydraulics/ChurchillFriction.cs b/dotnet/src/LymCsharp.Hydraulics/ChurchillFriction.cs
+new file mode 100644
+index 0000000..783ad4b
+--- /dev/null
++++ b/dotnet/src/LymCsharp.Hydraulics/ChurchillFriction.cs
+@@ -0,0 +1,24 @@
++namespace LymCsharp.Hydraulics;
++
++/// <summary>
++/// Churchill's 1977 equation: one explicit formula for laminar, transitional and turbulent flow, with no regime switch.
++/// It reduces to 64/Re at low Reynolds numbers and approximates Colebrook-White at high ones.
++/// </summary>
++public sealed class ChurchillFriction : IFrictionModel
++{
++    /// <inheritdoc/>
++    public double FrictionFactor(double reynolds, double relativeRoughness)
++    {
++        if (reynolds <= 0)
++        {
++            throw new ArgumentOutOfRangeException(nameof(reynolds), "Reynolds number must be positive.");
++        }
++
++        var laminarTerm = Math.Pow(8.0 / reynolds, 12);
++        var roughTurbulentTerm = Math.Pow(
++            2.457 * Math.Log(1.0 / (Math.Pow(7.0 / reynolds, 0.9) + 0.27 * relativeRoughness)), 16);
++        var transitionTerm = Math.Pow(37530.0 / reynolds, 16);
++
++        return 8.0 * Math.Pow(laminarTerm + Math.Pow(roughTurbulentTerm + transitionTerm, -1.5), 1.0 / 12);
++    }
++}
+diff --git a/dotnet/src/LymCsharp.Regression/RegressionCases.cs b/dotnet/src/LymCsharp.Regression/RegressionCases.cs
+index 2a83972..cf0ae0b 100644
+--- a/dotnet/src/LymCsharp.Regression/RegressionCases.cs
++++ b/dotnet/src/LymCsharp.Regression/RegressionCases.cs
+@@ -42,6 +42,9 @@ public static class RegressionCases
+         PipeFlowCase(
+             "oil-steel-6in-turbulent", new HaalandFriction(), Steel6Inch, Fluid.Oil,
+             new Quantity(36.5, UnitCatalog.LitrePerSecond), UnitCatalog.Bar),
++        PipeFlowCase(
++            "water-pvc-2in-transitional-churchill", new ChurchillFriction(), Pvc2Inch, Fluid.Water,
++            new Quantity(7.2, UnitCatalog.LitrePerMinute), UnitCatalog.Psi),
+     ];
+ 
+     private static RegressionCase PipeFlowCase(
+diff --git a/dotnet/tests/LymCsharp.Hydraulics.Tests/ChurchillFrictionTests.cs b/dotnet/tests/LymCsharp.Hydraulics.Tests/ChurchillFrictionTests.cs
+new file mode 100644
+index 0000000..b470e73
+--- /dev/null
++++ b/dotnet/tests/LymCsharp.Hydraulics.Tests/ChurchillFrictionTests.cs
+@@ -0,0 +1,43 @@
++using LymCsharp.Hydraulics;
++
++namespace LymCsharp.Hydraulics.Tests;
++
++public class ChurchillFrictionTests
++{
++    private readonly ChurchillFriction _model = new();
++
++    [TestCase(100.0)]
++    [TestCase(500.0)]
++    [TestCase(1000.0)]
++    public void LaminarFactorIs64OverRe(double reynolds)
++    {
++        Assert.That(_model.FrictionFactor(reynolds, 0.001), Is.EqualTo(64.0 / reynolds).Within(1e-9).Percent);
++    }
++
++    [TestCase(0.0)]
++    [TestCase(-5.0)]
++    public void NonPositiveReynoldsThrows(double reynolds)
++    {
++        Assert.Throws<ArgumentOutOfRangeException>(() => _model.FrictionFactor(reynolds, 0.001));
++    }
++
++    [Test]
++    public void TransitionalFactorMatchesReferenceValue()
++    {
++        var factor = _model.FrictionFactor(3000.0, 0.0001);
++
++        Assert.That(factor, Is.EqualTo(0.04305).Within(1).Percent);
++    }
++
++    [TestCase(10_000.0, 0.0)]
++    [TestCase(100_000.0, 0.0001)]
++    [TestCase(100_000.0, 0.001)]
++    [TestCase(1_000_000.0, 0.001)]
++    [TestCase(10_000_000.0, 0.01)]
++    public void TurbulentFactorAgreesWithColebrookWithinOnePercent(double reynolds, double relativeRoughness)
++    {
++        var colebrook = new ColebrookFriction().FrictionFactor(reynolds, relativeRoughness);
++
++        Assert.That(_model.FrictionFactor(reynolds, relativeRoughness), Is.EqualTo(colebrook).Within(1).Percent);
++    }
++}
