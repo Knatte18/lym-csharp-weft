@@ -20,7 +20,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T4 | **Fix the adopt check of root on neve** | [`adopt-fix-root-t1`](design-adopt-fix-root-t1.md) | darn · light | Record-Write | neve | 0m<br>0m |  |
+| T4 | **Fix the adopt check of root on neve** | [`adopt-fix-root-t1`](design-adopt-fix-root-t1.md) | darn · light | Drift-Baseline | neve | 0m<br>0m |  |
 
 #### Ready (0)
 
