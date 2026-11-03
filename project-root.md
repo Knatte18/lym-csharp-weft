@@ -1,6 +1,6 @@
 # P0 Root: entries under no project
 
-Rendered 2026-11-03 14:25 UTC; every age below is as of then.
+Rendered 2026-11-03 14:26 UTC; every age below is as of then.
 Under: [Board](README.md).
 
 Owner `neve`
@@ -18,7 +18,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T4 | **Fix the adopt check of root on neve** | [`adopt-fix-root-t1`](design-adopt-fix-root-t1.md) | darn · light | Worktree-Create | neve | 0m<br>0m |  |
+| T4 | **Fix the adopt check of root on neve** | [`adopt-fix-root-t1`](design-adopt-fix-root-t1.md) | darn · light | Record-Write | neve | 0m<br>0m |  |
 
 ### Ready (0)
 
