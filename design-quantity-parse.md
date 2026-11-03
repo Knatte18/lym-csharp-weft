@@ -1,6 +1,6 @@
 # Add Quantity.Parse
 
-`quantity-parse` · Task · enhancement · running · Describe
+`quantity-parse` · Task · enhancement · running · PR-Review
 
 ## Goal
 
