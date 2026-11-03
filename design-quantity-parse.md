@@ -1,6 +1,6 @@
 # Add Quantity.Parse
 
-`quantity-parse` · Task · enhancement · running · Drift-Recheck
+`quantity-parse` · Task · enhancement · running · Describe
 
 ## Goal
 
