@@ -18,7 +18,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Cache friction factors in PipeFlowCalculator**<br>• Skip recomputing the friction factor for a flow already solved; results unchanged | [`cached-friction-factor`](design-cached-friction-factor.md) | darn · light | Drift-Verify | neve | 3m<br>3m |  |
+| T1 | **Cache friction factors in PipeFlowCalculator**<br>• Skip recomputing the friction factor for a flow already solved; results unchanged | [`cached-friction-factor`](design-cached-friction-factor.md) | darn · light | Code-Bouncer | neve | 3m<br>3m |  |
 
 ### Ready (0)
 
