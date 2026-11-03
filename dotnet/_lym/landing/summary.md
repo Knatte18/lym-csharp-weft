@@ -1,42 +1,37 @@
-# Cache turbulent friction factors in PipeFlowCalculator
+# Cache friction factors in PipeFlowCalculator
 
-`PipeFlowCalculator` now remembers the friction factor of every turbulent or transitional flow it has solved,
-so solving the same flow again skips the friction model's `Math.Pow` and `Math.Log10` work.
-Every calculated result stays bit-identical to before.
+`PipeFlowCalculator` no longer recomputes the friction factor for a flow it has already solved.
+A flow sweep such as `PipeFlowTests.DropGrowsMonotonicallyAcrossFlowSweep` calls `IFrictionModel.FrictionFactor` once per point,
+and the turbulent models spend most of their time in `Math.Pow` and `Math.Log10`.
+This is a performance change only: every calculated result is unchanged.
 
-## Change
+## What changes
 
-- New `CachedFrictionModel : IFrictionModel` in `src/LymCsharp.Hydraulics/CachedFrictionModel.cs` wraps an inner model.
-  - Below a Reynolds number of 2300 it calls the inner model every time, because 64/Re costs less than a lookup.
-  - At 2300 and above it keys the factor on the exact `(Reynolds, RelativeRoughness)` pair and calls the inner model only on a miss.
-  - A Reynolds number that is not positive throws `ArgumentOutOfRangeException` before the inner model is reached, so a wrapped model that never validates still rejects it.
-- `PipeFlowCalculator` wraps the model it is given in `CachedFrictionModel`.
-  The parameterless constructor chains through the same path, so both constructors are covered, and the public API is unchanged.
-  Each calculator instance has its own cache.
+- New `CachedFrictionModel`, an `IFrictionModel` decorator over an inner model.
+  - Below a Reynolds number of 2300 it calls the inner model directly, since the laminar factor is cheaper than a lookup.
+  - At 2300 and above it returns a stored factor for an exact repeat of the Reynolds number and relative roughness, and otherwise asks the inner model and stores the answer.
+  - A Reynolds number that is not positive throws `ArgumentOutOfRangeException`, before the inner model is reached.
+- `PipeFlowCalculator` builds one `CachedFrictionModel` over the model it is given and calls it from `Calculate`.
+  Both constructors get the cache, and the public API is unchanged.
 
 ## Design decisions
 
-- **Exact keys, no rounding.**
-  The board entry asked for the Reynolds number to be rounded to the nearest whole number before the lookup.
-  The parent decision recorded in the decision record dropped that rounding, because computing the factor at a rounded Reynolds number changes `friction_factor` and `pressure_drop_pa`.
-  At 10 significant digits the change shows as drift on every regression case at Re ≥ 2300, which breaks the entry's "results unchanged" invariant.
-  The cost is that only an exact repeat of the inputs is a hit:
-  a flow sweep of distinct flows, such as `PipeFlowTests.DropGrowsMonotonicallyAcrossFlowSweep`, gets no speedup.
-- **`ConcurrentDictionary` instead of `Dictionary`.**
-  Before this change `PipeFlowCalculator` held no mutable state, so a caller could share one calculator across threads.
-  A plain `Dictionary` would make that sharing unsafe, so the cache uses `ConcurrentDictionary.GetOrAdd`.
-
-## Open risks
-
-- The cache is never evicted.
-  A long-lived calculator that solves many distinct turbulent flows holds one entry per flow:
-  a 100 000-point sweep holds 100 000 entries until the calculator is collected.
+- The cache keys on the exact Reynolds number and relative roughness, with no rounding.
+  Rounding the Reynolds number would change `FrictionFactor` and `PressureDropPascals` for every case at 2300 and above, which contradicts the unchanged-results goal.
+  The cost is that a hit needs an exact repeat of the inputs.
+- The cache is a `ConcurrentDictionary`, so a shared calculator stays thread-safe.
+  Under a race the inner model may run more than once for a new key; every run returns the same value, so only one is kept.
+- Entries are never evicted, so memory grows by one entry per distinct turbulent input.
+  The cache lives as long as its calculator.
 
 ## Tests
 
-- `tests/LymCsharp.Hydraulics.Tests/CachedFrictionModelTests.cs` uses a call-counting stub model:
-  - a repeated call at Re 2300 and at 100 000 reaches the inner model once and returns its value;
-  - inputs that differ in either the Reynolds number or the roughness each reach the inner model and keep their own factor;
-  - a laminar call reaches the inner model every time;
-  - a Reynolds number that is not positive throws and never reaches the inner model.
-- `PipeFlowTests` and `FrictionTests` are unchanged.
+- `CachedFrictionModelTests` covers a repeat turbulent call that does not reach the inner model (at 2300 and at 100 000), distinct inputs that each reach it, laminar calls that always reach it, and non-positive Reynolds numbers that throw.
+- `PipeFlowTests.RepeatedTurbulentFlowReachesFrictionModelOnce` pins that `Calculate` reaches the friction model through the cache.
+
+## To check by hand
+
+- `PipeFlowCalculator.Calculate` must call `cachedFriction`, not the `friction` constructor parameter.
+  A direct call would pass every existing result test and only lose the speedup, so confirm `RepeatedTurbulentFlowReachesFrictionModelOnce` is the test that guards it.
+- The speedup itself was not measured.
+  Time the `Slow` sweep test before and after if the size of the gain matters.
