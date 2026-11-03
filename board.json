@@ -16,7 +16,7 @@
       "isolated": false,
       "brief": "",
       "body": "The friction models (`SwameeJainFriction`, `HaalandFriction`, `ColebrookFriction`) cover turbulent flow only.\n\n## Expected\n\n- `ChurchillFriction : IFrictionModel` in `src/LymCsharp.Hydraulics` implements Churchill's 1977 equation, valid for laminar, transitional and turbulent flow.\n- Tests check it against `64/Re` in laminar flow and against `ColebrookFriction` within 1 % in turbulent flow.\n- `RegressionCases` gains one case that runs a pipe flow through `ChurchillFriction`; the existing cases are unchanged.\n\n## Why\n\nThis run proves how Drift treats a new regression case that the baseline does not hold, while every existing case stays clean.\n",
-      "status": "running · Code-Burler-Fix",
+      "status": "running · Code-Bouncer",
       "created": "2026-11-03T14:16:22Z",
       "revised": "2026-11-03T14:16:27Z",
       "profile": "light"
