@@ -1,0 +1,11 @@
+{
+  "verdict": "resume",
+  "reason": "The Drift-Await baseline capture exited 0 at 2026-11-03T16:04:56Z and wrote no file to .lym/drift/baseline. Its capture log and capture-child log are both empty, so the cause is not named from what I read. The stop names a re-capture as the way forward, and no re-step has run yet, so a plain re-launch is the cheapest test. If the capture fails again with empty logs, the next stop should be hand-back or escalate.",
+  "question": "",
+  "goto": "Drift-Await",
+  "cause": "",
+  "attempt": 1,
+  "attempt_dir": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/shed/report-significant-digits/tackler/attempt-1",
+  "verdict_path": "/home/knatte/Code/lym-csharp-LYMHUB/report-significant-digits/dotnet/_lym/shed/report-significant-digits/tackler/attempt-1/verdict.yaml",
+  "case_brief_path": ""
+}
