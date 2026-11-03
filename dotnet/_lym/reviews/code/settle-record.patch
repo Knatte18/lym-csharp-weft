@@ -1,0 +1,101 @@
+diff --git a/dotnet/src/LymCsharp.Units/Quantity.cs b/dotnet/src/LymCsharp.Units/Quantity.cs
+index c16aabe..d288c80 100644
+--- a/dotnet/src/LymCsharp.Units/Quantity.cs
++++ b/dotnet/src/LymCsharp.Units/Quantity.cs
+@@ -1,3 +1,5 @@
++using System.Globalization;
++
+ namespace LymCsharp.Units;
+ 
+ /// <summary>The physical dimension a unit measures.</summary>
+@@ -43,4 +45,23 @@ public readonly record struct Quantity(double Value, IUnit Unit)
+     }
+ 
+     public override string ToString() => $"{Value:0.###} {Unit.Symbol}";
++
++    /// <summary>
++    /// Reads a quantity from a number, one space and a unit symbol, the form <see cref="ToString"/> writes.
++    /// The number is read in the current culture, as <see cref="ToString"/> writes it.
++    /// </summary>
++    /// <exception cref="FormatException">The text holds no space, or its number part is not a number.</exception>
++    /// <exception cref="KeyNotFoundException">The unit symbol names no known unit.</exception>
++    public static Quantity Parse(string text)
++    {
++        var separator = text.IndexOf(' ');
++        if (separator < 0)
++        {
++            throw new FormatException($"Quantity '{text}' has no space between value and unit.");
++        }
++
++        var value = double.Parse(text[..separator], NumberStyles.Float, CultureInfo.CurrentCulture);
++        var unit = UnitRegistry.Find(text[(separator + 1)..]);
++        return new Quantity(value, unit);
++    }
+ }
+diff --git a/dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs b/dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs
+index c286547..6cb83dc 100644
+--- a/dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs
++++ b/dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs
+@@ -2,6 +2,7 @@ using LymCsharp.Units;
+ 
+ namespace LymCsharp.Units.Tests;
+ 
++[SetCulture("")]
+ public class QuantityTests
+ {
+     [TestCase(1.0, 100.0)]
+@@ -70,6 +71,54 @@ public class QuantityTests
+         Assert.That(new Quantity(1.5, UnitCatalog.Bar).ToString(), Is.EqualTo("1.5 bar"));
+     }
+ 
++    private static IEnumerable<TestCaseData> ParseCases()
++    {
++        yield return new TestCaseData("1.5 bar", new Quantity(1.5, UnitCatalog.Bar));
++        yield return new TestCaseData("7.2 l/min", new Quantity(7.2, UnitCatalog.LitrePerMinute));
++    }
++
++    [TestCaseSource(nameof(ParseCases))]
++    public void ParseReadsValueAndUnit(string text, Quantity expected)
++    {
++        Assert.That(Quantity.Parse(text), Is.EqualTo(expected));
++    }
++
++    [Test]
++    public void ParseReadsBackToStringOutput()
++    {
++        var quantity = new Quantity(3.25, UnitCatalog.Psi);
++
++        Assert.That(Quantity.Parse(quantity.ToString()), Is.EqualTo(quantity));
++    }
++
++    [Test]
++    public void ParsingUnknownSymbolThrows()
++    {
++        Assert.Throws<KeyNotFoundException>(() => Quantity.Parse("1.5 furlong"));
++    }
++
++    [TestCase("1.5bar")]
++    [TestCase("abc bar")]
++    [TestCase("1,5 bar")]
++    public void ParsingTextThatCannotBeSplitOrReadThrows(string text)
++    {
++        Assert.Throws<FormatException>(() => Quantity.Parse(text));
++    }
++
++    // SetCulture changes process-global state for the test's duration.
++    [Test]
++    [SetCulture("de-DE")]
++    public void ParseReadsTheCurrentCulturesDecimalSeparator()
++    {
++        var quantity = new Quantity(3.25, UnitCatalog.Psi);
++
++        Assert.Multiple(() =>
++        {
++            Assert.That(Quantity.Parse(quantity.ToString()), Is.EqualTo(quantity));
++            Assert.Throws<FormatException>(() => Quantity.Parse("1.5 bar"));
++        });
++    }
++
+     [Test]
+     public void LinearUnitConvertsToAndFromBase()
+     {
