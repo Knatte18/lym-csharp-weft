@@ -1,25 +1,24 @@
 # Extract PipeFlowCalculator.Reynolds from Calculate
 
 `PipeFlowCalculator.Calculate` computed the Reynolds number inline.
-It now calls a new public static `PipeFlowCalculator.Reynolds(Pipe, Fluid, Quantity flow)`,
-so callers can get the Reynolds number without running a full pressure-drop calculation.
+It is now a public static `PipeFlowCalculator.Reynolds(Pipe, Fluid, Quantity flow)`, and `Calculate` calls it.
+This is a behavior-preserving refactor: every `Calculate` result is meant to be unchanged to the last digit.
+It also exercises the regression harness's baseline capture and clean compare on a hub anchored at `dotnet/`.
 
-## Behavior
+## Design
 
-The refactor preserves behavior.
-`Reynolds` evaluates `ρ·v·D/μ` with the same operands in the same order as the old inline expression,
-so every `PipeFlowResult` that `Calculate` returns is unchanged to the last bit.
-
-## Design decisions
-
-- The flow-to-velocity conversion and the positive-flow check moved into a private `MeanVelocityMetresPerSecond`, which `Reynolds` and `Calculate` both call.
-  `Reynolds` is public, so it rejects a non-positive flow with the same `ArgumentOutOfRangeException` (parameter `flow`) that `Calculate` throws.
-  It doesn't return a negative or infinite Reynolds number.
-- `Calculate` converts the flow twice, once for its own velocity and once inside `Reynolds`.
-  The repeated conversion and division are cheap, and they keep `Reynolds`' signature to the one the entry asks for.
+- The flow validation and mean-velocity computation moved into a private static `MeanVelocityMetresPerSecond`.
+  `Reynolds` and `Calculate` both use it, so `Reynolds` rejects a non-positive flow with the same `ArgumentOutOfRangeException` (`flow`, "Flow must be positive.") as `Calculate`.
+- `Calculate` still needs the velocity for the pressure drop, so it computes the velocity once itself and once again inside `Reynolds`.
+  The arithmetic is identical, so the values are bit-for-bit the same; the cost is one redundant division and unit conversion.
+  I chose that over an overload taking a precomputed velocity to keep the public surface to the single requested method.
 
 ## Tests
 
-`PipeFlowTests.ReynoldsMatchesFourRhoQOverPiMuD` checks `Reynolds` against the closed form `4ρQ/(πμD)`.
-It covers oil at 0.1 L/s, which is laminar, and water at 10 L/s, which is turbulent,
-and it confirms that `Classify` puts each result in the expected regime.
+- `ReynoldsMatchesFourRhoQOverPiMuD` pins `Reynolds` for one laminar flow (oil) and one turbulent flow (water) against `4ρQ/(πμD)`, and checks each classifies as expected.
+- `ReynoldsRejectsNonPositiveFlow` covers zero and negative flow.
+
+## To check by hand
+
+- Run the regression harness compare against the baseline captured before this change, and confirm it reports no drift.
+  It was not run as part of writing this description.
