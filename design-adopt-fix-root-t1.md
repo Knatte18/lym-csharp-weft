@@ -1,6 +1,6 @@
 # Fix the adopt check of root on neve
 
-`adopt-fix-root-t1` · Task · bug · running · Drift-Baseline
+`adopt-fix-root-t1` · Task · bug · draft
 
 The adopt check of root failed on this machine: tier0.
 
