@@ -2,8 +2,6 @@
 
 `report-significant-digits` · Task · enhancement · draft
 
-Depends on: [`churchill-friction`](design-churchill-friction.md)
-
 `ResultFormatter` (`src/LymCsharp.Reporting/ResultFormatter.cs`) formats the pipe flow report's numbers.
 
 ## Expected
