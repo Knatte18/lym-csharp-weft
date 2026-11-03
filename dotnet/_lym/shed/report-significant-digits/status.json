@@ -1,12 +1,11 @@
 {
-  "current_producer": "Drift-Await",
+  "current_producer": "Darn-Write",
   "state": "running",
   "error": "",
-  "entered_row": "Drift-Await",
   "pause_requested": false,
   "activity": {
-    "now": "Drift-Await",
-    "last": "Drift-Await → goto",
+    "now": "Darn-Write",
+    "last": "Drift-Await → done",
     "wait": ""
   },
   "history": [
@@ -53,6 +52,12 @@
       "outcome": "goto",
       "output": "",
       "at": "2026-11-03T16:34:41Z"
+    },
+    {
+      "producer": "Drift-Await",
+      "outcome": "done",
+      "output": "",
+      "at": "2026-11-03T16:34:46Z"
     }
   ],
   "product": {
