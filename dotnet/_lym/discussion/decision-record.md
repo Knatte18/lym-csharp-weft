@@ -32,6 +32,12 @@ This is a performance change only: every calculated result stays unchanged.
 
 ## Decisions
 
+### Added after Discussion (parent, 2026-11-03): Cache keys on exact inputs, no Reynolds rounding
+
+Decision: Key the friction-factor cache on the exact Reynolds number and relative roughness, with no rounding. Every calculated result stays bit-identical to the current code; a cache hit needs an exact repeat of the inputs. The entry's rounding of Re to the nearest whole number is dropped.
+
+Rationale: The entry's stated invariant is a performance change only with every result unchanged; rounding Re contradicts it and would drift friction_factor and pressure_drop_pa on every case at Re >= 2300. The invariant wins over the mechanism.
+
 ## Constraints
 
 ## Auto-mode assumptions
