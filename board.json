@@ -16,7 +16,7 @@
       "isolated": false,
       "brief": "",
       "body": "`ResultFormatter` (`src/LymCsharp.Reporting/ResultFormatter.cs`) formats the pipe flow report's numbers.\n\n## Expected\n\n- The report prints every numeric value to 4 significant digits.\n- The formatter's tests follow the new format.\n- The regression cases that render the formatted report now drift on purpose, and the run records that drift as intended.\n\n## Why\n\nThis run proves that Drift reports an intended output change and that the run's Drift verify accepts it with a stated reason, on a hub whose anchor is `dotnet/`.\n",
-      "status": "running · PR-Review",
+      "status": "running · Finalize",
       "created": "2026-11-03T14:16:22Z",
       "revised": "2026-11-03T14:16:27Z",
       "profile": "light"

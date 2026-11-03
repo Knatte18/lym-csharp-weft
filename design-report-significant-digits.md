@@ -1,6 +1,6 @@
 # The pipe flow report prints its values to 4 significant digits
 
-`report-significant-digits` · Task · enhancement · running · PR-Review
+`report-significant-digits` · Task · enhancement · running · Finalize
 
 `ResultFormatter` (`src/LymCsharp.Reporting/ResultFormatter.cs`) formats the pipe flow report's numbers.
 
