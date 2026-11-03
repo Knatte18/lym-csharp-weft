@@ -1,0 +1,118 @@
+diff --git a/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs b/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs
+index b7866a3..2ffff95 100644
+--- a/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs
++++ b/dotnet/src/LymCsharp.Reporting/ResultFormatter.cs
+@@ -1,3 +1,4 @@
++using System.Globalization;
+ using LymCsharp.Hydraulics;
+ using LymCsharp.Units;
+ 
+@@ -6,10 +7,49 @@ namespace LymCsharp.Reporting;
+ /// <summary>Renders calculation results as text.</summary>
+ public static class ResultFormatter
+ {
++    private const int SignificantDigits = 4;
++
++    /// <summary>
++    /// Renders the flow regime, velocity, Reynolds number and pressure drop in <paramref name="pressureUnit"/> as one line.
++    /// Every numeric value is rounded to 4 significant digits and printed without trailing zeros.
++    /// </summary>
+     public static string Format(PipeFlowResult result, IUnit pressureUnit)
+     {
+         var drop = new Quantity(result.PressureDropPascals, UnitCatalog.Pascal).ConvertTo(pressureUnit);
+-        return $"{result.Regime} flow, v = {result.VelocityMetresPerSecond:0.###} m/s, "
+-               + $"Re = {result.Reynolds:0}, dP = {drop}";
++        return $"{result.Regime} flow, v = {FormatToSignificantDigits(result.VelocityMetresPerSecond)} m/s, "
++               + $"Re = {FormatToSignificantDigits(result.Reynolds)}, "
++               + $"dP = {FormatToSignificantDigits(drop.Value)} {drop.Unit.Symbol}";
++    }
++
++    // Fixed-point text, because interpolating a double prints exponent notation below 1e-4.
++    private static string FormatToSignificantDigits(double value)
++    {
++        if (value == 0)
++        {
++            return "0";
++        }
++
++        var leadingDigitExponent = (int)Math.Floor(Math.Log10(Math.Abs(value)));
++        var decimals = SignificantDigits - 1 - leadingDigitExponent;
++        var rounded = RoundToDecimals(value, decimals);
++        return rounded.ToString("0." + new string('#', Math.Max(decimals, 0)), CultureInfo.InvariantCulture);
++    }
++
++    private static double RoundToDecimals(double value, int decimals)
++    {
++        // Math.Round accepts only 0 to 15 decimals, so the other cases round by scaling by a power of ten.
++        if (decimals < 0)
++        {
++            var scale = Math.Pow(10, -decimals);
++            return Math.Round(value / scale) * scale;
++        }
++
++        if (decimals > 15)
++        {
++            var scale = Math.Pow(10, decimals);
++            return Math.Round(value * scale) / scale;
++        }
++
++        return Math.Round(value, decimals);
+     }
+ }
+diff --git a/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs b/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs
+index 92aff7f..5581280 100644
+--- a/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs
++++ b/dotnet/tests/LymCsharp.Hydraulics.Tests/ResultFormatterTests.cs
+@@ -6,30 +6,30 @@ namespace LymCsharp.Hydraulics.Tests;
+ 
+ public class ResultFormatterTests
+ {
+-    private static readonly PipeFlowResult Sample =
+-        new(1.5, 50_000, FlowRegime.Turbulent, 0.02, 200_000);
+-
+-    [Test]
+-    public void FormatsInPascals()
+-    {
+-        var text = ResultFormatter.Format(Sample, UnitCatalog.Pascal);
+-
+-        Assert.That(text, Does.Contain("Turbulent flow").And.Contain("200000 Pa"));
+-    }
+-
+-    [Test]
+-    public void FormatsInBar()
++    [TestCase(1.5, 50_000, FlowRegime.Turbulent, 200_000, "Pa",
++        "Turbulent flow, v = 1.5 m/s, Re = 50000, dP = 200000 Pa")]
++    [TestCase(1.5, 50_000, FlowRegime.Turbulent, 200_000, "bar",
++        "Turbulent flow, v = 1.5 m/s, Re = 50000, dP = 2 bar")]
++    [TestCase(1.23456, 123_456, FlowRegime.Turbulent, 123_456, "Pa",
++        "Turbulent flow, v = 1.235 m/s, Re = 123500, dP = 123500 Pa")]
++    [TestCase(1.23456, 123_456, FlowRegime.Turbulent, 123_456, "bar",
++        "Turbulent flow, v = 1.235 m/s, Re = 123500, dP = 1.235 bar")]
++    [TestCase(0.000123456, 1.23456, FlowRegime.Laminar, 0.0123456, "Pa",
++        "Laminar flow, v = 0.0001235 m/s, Re = 1.235, dP = 0.01235 Pa")]
++    [TestCase(1.23456e-14, 1.0, FlowRegime.Laminar, 0.0000123456, "Pa",
++        "Laminar flow, v = 0.00000000000001235 m/s, Re = 1, dP = 0.00001235 Pa")]
++    [TestCase(1.5, 50_000, FlowRegime.Turbulent, -123_456, "Pa",
++        "Turbulent flow, v = 1.5 m/s, Re = 50000, dP = -123500 Pa")]
++    [TestCase(0.0, 0.0,FlowRegime.Laminar, 0.0, "Pa",
++        "Laminar flow, v = 0 m/s, Re = 0, dP = 0 Pa")]
++    public void FormatsEveryValueToFourSignificantDigits(
++        double velocity, double reynolds, FlowRegime regime, double pressureDropPascals, string pressureSymbol,
++        string expected)
+     {
+-        var text = ResultFormatter.Format(Sample, UnitCatalog.Bar);
+-
+-        Assert.That(text, Does.Contain("2 bar"));
+-    }
++        var result = new PipeFlowResult(velocity, reynolds, regime, 0.02, pressureDropPascals);
+ 
+-    [Test]
+-    public void IncludesVelocityAndReynolds()
+-    {
+-        var text = ResultFormatter.Format(Sample, UnitCatalog.Pascal);
++        var text = ResultFormatter.Format(result, UnitRegistry.Find(pressureSymbol));
+ 
+-        Assert.That(text, Does.Contain("v = 1.5 m/s").And.Contain("Re = 50000"));
++        Assert.That(text, Is.EqualTo(expected));
+     }
+ }
