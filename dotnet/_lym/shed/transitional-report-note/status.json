@@ -1,11 +1,11 @@
 {
-  "current_producer": "Drift-Await",
+  "current_producer": "Darn-Write",
   "state": "running",
   "error": "",
   "pause_requested": false,
   "activity": {
-    "now": "Drift-Await",
-    "last": "Drift-Baseline → done",
+    "now": "Darn-Write",
+    "last": "Drift-Await → done",
     "wait": ""
   },
   "history": [
@@ -26,6 +26,12 @@
       "outcome": "done",
       "output": "/home/knatte/Code/lym-csharp-LYMHUB/transitional-report-note/dotnet/_lym/drift/baseline.md",
       "at": "2026-11-03T19:29:48Z"
+    },
+    {
+      "producer": "Drift-Await",
+      "outcome": "done",
+      "output": "",
+      "at": "2026-11-03T19:29:53Z"
     }
   ],
   "product": {
