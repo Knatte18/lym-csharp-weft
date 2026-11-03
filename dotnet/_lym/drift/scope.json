@@ -1,15 +1,8 @@
 {
-  "scope": "partial",
-  "skip": [
-    "water-steel-dn100-swamee-jain",
-    "water-steel-dn100-haaland",
-    "oil-steel-dn100-laminar",
-    "water-pvc-2in-transitional",
-    "oil-steel-6in-turbulent",
-    "water-pvc-2in-transitional-churchill"
-  ],
-  "recorded_at": "2026-11-03T16:04:45Z",
-  "awaited_at": "",
+  "scope": "full",
+  "skip": null,
+  "recorded_at": "2026-11-03T16:32:25Z",
+  "awaited_at": "2026-11-03T16:34:46Z",
   "deferred": false,
   "waived_reason": "",
   "waived_at": "",
