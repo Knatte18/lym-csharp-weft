@@ -2,26 +2,6 @@
   "version": 1,
   "entries": [
     {
-      "id": 0,
-      "handle": "T1",
-      "slug": "cached-friction-factor",
-      "title": "Cache friction factors in PipeFlowCalculator",
-      "kind": "task",
-      "labels": [
-        "enhancement"
-      ],
-      "issues": [],
-      "recipe": "darn",
-      "depends_on": [],
-      "isolated": false,
-      "brief": "Skip recomputing the friction factor for a flow already solved; results unchanged",
-      "body": "## Goal\n\nStop `PipeFlowCalculator` from recomputing the friction factor for flows it has already solved.\nA flow sweep, such as the `Slow` test `PipeFlowTests.DropGrowsMonotonicallyAcrossFlowSweep`, calls `IFrictionModel.FrictionFactor` once per point,\nand the turbulent models spend most of their time in `Math.Pow` and `Math.Log10`.\n\nThis is a performance change only: every calculated result stays unchanged.\n\n## Change\n\n- Add `CachedFrictionModel : IFrictionModel` in `dotnet/src/LymCsharp.Hydraulics/CachedFrictionModel.cs`, a decorator over an inner `IFrictionModel`.\n  - Below a Reynolds number of 2300 it calls the inner model directly; the laminar factor 64/Re is cheaper than a lookup.\n  - At 2300 and above it rounds the Reynolds number to the nearest whole number and keys a `Dictionary\u003c(double Reynolds, double RelativeRoughness), double\u003e` on the rounded Reynolds number and the relative roughness.\n    On a miss it computes the inner model's factor at the rounded Reynolds number and stores it, so an entry never depends on which caller filled it first.\n  - It validates its arguments as the inner model does: a Reynolds number that is not positive throws `ArgumentOutOfRangeException`.\n- `PipeFlowCalculator` wraps the model it is given in `CachedFrictionModel`, in both constructors, so every caller gets the cache without a code change.\n- Keep `PipeFlowCalculator`'s public API as it is.\n\n## Tests\n\n- Add `dotnet/tests/LymCsharp.Hydraulics.Tests/CachedFrictionModelTests.cs`:\n  - a second call with the same arguments does not reach the inner model (count calls on a stub model);\n  - a laminar call always reaches the inner model;\n  - a Reynolds number that is not positive throws.\n- The existing `PipeFlowTests` and `FrictionTests` stay green unchanged.\n",
-      "status": "done",
-      "created": "2026-11-03T18:44:41Z",
-      "revised": "2026-11-03T18:44:45Z",
-      "profile": "light"
-    },
-    {
       "id": 1,
       "handle": "T2",
       "slug": "quantity-parse",
@@ -32,9 +12,7 @@
       ],
       "issues": [],
       "recipe": "darn",
-      "depends_on": [
-        "cached-friction-factor"
-      ],
+      "depends_on": [],
       "isolated": false,
       "brief": "Read a quantity back from the text Quantity.ToString writes",
       "body": "## Goal\n\nLet callers read a quantity back from the text `Quantity.ToString` writes, such as `7.2 l/min` or `1.5 bar`, so a flow or pressure can come from a config file or a command line.\n\n## Change\n\n- Add `public static Quantity Parse(string text)` to `Quantity` in `dotnet/src/LymCsharp.Units/Quantity.cs`.\n  - It reads a number, one space and a unit symbol, the form `Quantity.ToString` writes.\n  - It looks the symbol up through `UnitRegistry.Find`, so an unknown symbol throws `KeyNotFoundException` as `Find` does.\n  - Text with no space in it throws `FormatException`.\n- Nothing else changes: no caller uses `Parse` yet, and no calculation or report output moves.\n\n## Tests\n\nAdd to `dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs`:\n\n- `Parse(\"1.5 bar\")` gives the value 1.5 in `UnitCatalog.Bar`;\n- `Parse(\"7.2 l/min\")` gives the value 7.2 in `UnitCatalog.LitrePerMinute`;\n- `Parse(q.ToString())` gives back `q` for a quantity such as 3.25 psi;\n- an unknown symbol throws `KeyNotFoundException`;\n- text with no space throws `FormatException`.\n",

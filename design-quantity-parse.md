@@ -2,8 +2,6 @@
 
 `quantity-parse` · Task · enhancement · draft
 
-Depends on: [`cached-friction-factor`](design-cached-friction-factor.md)
-
 ## Goal
 
 Let callers read a quantity back from the text `Quantity.ToString` writes, such as `7.2 l/min` or `1.5 bar`, so a flow or pressure can come from a config file or a command line.

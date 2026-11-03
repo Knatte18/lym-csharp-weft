@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-11-03 19:14 UTC; every age below is as of then.
+Rendered 2026-11-03 19:15 UTC; every age below is as of then.
 Prime owner: `neve`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -32,11 +32,3 @@ Not released; nothing starts it until its status is cleared.
 ### Notes (0)
 
 Not tasks: ideas and observations, merged into a task when one is promoted.
-
-### Done (1)
-
-Finished, awaiting `lym board prune --apply`.
-
-| # | Entry | Slug | Age<br>Revised | Labels |
-| --- | --- | --- | --- | --- |
-| T1 | **Cache friction factors in PipeFlowCalculator**<br>• Skip recomputing the friction factor for a flow already solved; results unchanged | [`cached-friction-factor`](design-cached-friction-factor.md) | 30m<br>30m |  |
