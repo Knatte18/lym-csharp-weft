@@ -1,6 +1,6 @@
 # Board
 
-Rendered 2026-11-03 16:03 UTC; every age below is as of then.
+Rendered 2026-11-03 16:04 UTC; every age below is as of then.
 Prime owner: `neve`.
 
 Tasks are grouped by dependency layer and notes by type.
@@ -20,7 +20,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T3 | **The pipe flow report prints its values to 4 significant digits** | [`report-significant-digits`](design-report-significant-digits.md) | darn · light | Worktree-Create | neve | 1h<br>1h |  |
+| T3 | **The pipe flow report prints its values to 4 significant digits** | [`report-significant-digits`](design-report-significant-digits.md) | darn · light | Record-Write | neve | 1h<br>1h |  |
 
 #### Ready (0)
 
