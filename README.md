@@ -20,7 +20,7 @@ Held by a run; its scope is locked until the run ends.
 
 | # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T1 | **Pull the Reynolds number computation out of PipeFlowCalculator.Calculate** | [`pipeflow-reynolds-helper`](design-pipeflow-reynolds-helper.md) | darn · light | Worktree-Create | neve | 10m<br>10m |  |
+| T1 | **Pull the Reynolds number computation out of PipeFlowCalculator.Calculate** | [`pipeflow-reynolds-helper`](design-pipeflow-reynolds-helper.md) | darn · light | Record-Write | neve | 11m<br>11m |  |
 
 #### Ready (0)
 
@@ -34,8 +34,8 @@ Not released; nothing starts it until its status is cleared.
 
 | # | Task | Slug | Recipe | After | Age<br>Revised | Labels |
 | --- | --- | --- | --- | --- | --- | --- |
-| T2 | `draft` **Add ChurchillFriction, one friction model valid across every flow regime** | [`churchill-friction`](design-churchill-friction.md) | darn · light | T1 | 10m<br>10m |  |
-| T3 | `draft` **The pipe flow report prints its values to 4 significant digits** | [`report-significant-digits`](design-report-significant-digits.md) | darn · light | T2 | 10m<br>10m |  |
+| T2 | `draft` **Add ChurchillFriction, one friction model valid across every flow regime** | [`churchill-friction`](design-churchill-friction.md) | darn · light | T1 | 11m<br>11m |  |
+| T3 | `draft` **The pipe flow report prints its values to 4 significant digits** | [`report-significant-digits`](design-report-significant-digits.md) | darn · light | T2 | 11m<br>11m |  |
 
 ### Notes (0)
 

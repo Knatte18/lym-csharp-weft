@@ -1,6 +1,6 @@
 # Pull the Reynolds number computation out of PipeFlowCalculator.Calculate
 
-`pipeflow-reynolds-helper` · Task · enhancement · running · Worktree-Create
+`pipeflow-reynolds-helper` · Task · enhancement · running · Record-Write
 
 `PipeFlowCalculator.Calculate` (`src/LymCsharp.Hydraulics/PipeFlow.cs`) computes the Reynolds number inline.
 
