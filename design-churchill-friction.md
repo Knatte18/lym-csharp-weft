@@ -2,6 +2,8 @@
 
 `churchill-friction` · Task · enhancement · draft
 
+Depends on: [`pipeflow-reynolds-helper`](design-pipeflow-reynolds-helper.md)
+
 The friction models (`SwameeJainFriction`, `HaalandFriction`, `ColebrookFriction`) cover turbulent flow only.
 
 ## Expected
