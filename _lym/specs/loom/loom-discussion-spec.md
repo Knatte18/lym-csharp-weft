@@ -1,4 +1,4 @@
-<!-- lym-stencil: sha256=8eaa4cc7633c4800f9f83a60b69f4c7ccb69e236bed3bf1902652a09fccc25e1 build=c49ba448cd942b81a5c9fe25553707a8279487d0 time=2026-10-29T10:06:41Z -->
+<!-- lym-stencil: sha256=95a07a3bd25cee25e1f9cf5553b87a4499c6baa78f10f392db1d48232306773e build=41cf1fcacc85e69648809274b967a7dbccc4e674 time=2026-11-03T13:14:57Z -->
 
 # Discussion spec — the decision record, the support log and the relevant list
 
@@ -50,12 +50,20 @@ An `### Added after Discussion` entry carries no id.
 Any other H3 there is refused, as a `decision-heading-malformed` finding, and a repeated id as a `decision-id-duplicate` finding.
 Each id appears as a whole word in a bullet of `## Acceptance criteria`, so `D1` is not met by `D10`, and a range such as "D1 to D4" covers only the ids it spells.
 An id no bullet names is a `decision-not-in-acceptance` finding.
-Both checks run for loom and darn records alike, in the discussion gates and `lym loom validate-discussion`, and not in `lym loom decision add`.
-Lines inside fenced blocks are not read.
+Both checks run for every loom record, in the discussion gates, Darn-Write's post-session guard and `lym loom validate-discussion`, and not in `lym loom decision add`.
+Lines inside fenced blocks are not read, and the section check counts a required heading only outside one.
+A fenced block follows CommonMark's rule for a top-level fence:
+
+- It opens on a line of at most three leading spaces and a run of at least three backticks or tildes; a backtick run whose info string holds a backtick opens none.
+- It closes only on a line of at most three leading spaces, a run of the opening character at least as long as the opening run, and nothing after the run but spaces or tabs.
+  Any other line inside it, a shorter run, the other character or a run followed by text such as ` ```js `, is body text.
+- A line indented four or more spaces neither opens nor closes.
+- An unclosed fence runs to the end of the document.
+- A list item or blockquote is not read, so a fence nested in one is read as a top-level line.
 
 ### Citations in a loom record
 
-On a loom run, the discussion check tests the paths and symbols the record cites in backticks; a darn record's citations are not tested.
+The discussion check tests the paths and symbols a record cites in backticks only when the run's record row is Discussion-Write; a Record-Write record's citations are not tested, and neither is its relevant list read.
 
 - A token is a path when it holds a `/`, none of `#>*{}$:`, no `...` segment, and its first segment is a root entry git tracks, an entry staged and never committed included; `_lym/` and `.lym/` paths are never tested.
   It must exist in the worktree, and a token ending in `/` must be a directory; otherwise the check reports `citation-path-missing`.
@@ -79,6 +87,9 @@ The Discussion-Write and Discussion-Burler-Fix gates halt on a quarry outage as 
 - **Must-cover test scenarios go under `## Acceptance criteria`.**
   There is no separate `## Testing` section.
   A scenario names a behavior to cover, not a test to write, and an existing test or a new table row may meet it.
+- **A criterion is behavior a test can check, or a review check.**
+  A criterion that a stencil, spec, doc or other prose names, says or contains a wording opens its bullet with `Review:`.
+  The code review checks it by reading the text the diff leaves, and no test asserts that prose.
 - **A Decision that adds an edge or weakens a guard states its bound.**
   When a Decision introduces a new verb, flag, escape hatch or routing edge, or removes, downgrades or makes bypassable a guard, state in that Decision what it can now skip or let through and what bounds it.
   The discussion review flags one left unbounded.
@@ -90,8 +101,8 @@ The Discussion-Write and Discussion-Burler-Fix gates halt on a quarry outage as 
 - `### Added after Discussion (<by>, <date>): <title>` entries under `## Decisions` are appended only by `lym loom decision add`.
   A writer never edits or removes one, and a record that drops an entry its history held fails the format check.
 - A `## PATTERN changes` bullet carrying the ` — added after Discussion (<by>, <date>)` suffix is appended only by `lym loom decision add`.
-  A writer never edits or removes one, and a record that drops a bullet its history held fails the format check wherever the check for dropped `### Added after Discussion` entries runs: the darn discussion gate, `lym loom validate-discussion` on a darn run and the verb's darn-record check.
-  A loom run's discussion check reads no history for either.
+  A writer never edits or removes one, and a record that drops a bullet its history held fails the format check wherever the check for dropped `### Added after Discussion` entries runs.
+  That check runs on every loom record, after the section check is clean: in the discussion gates, in Darn-Write's post-session guard and in `lym loom validate-discussion`, which commits nothing.
 - `<!-- lym:carry-over … -->` blocks under `## Open risks` are written only by Go.
   A writer never authors, edits or removes one.
 

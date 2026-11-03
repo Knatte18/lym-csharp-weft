@@ -1,4 +1,4 @@
-<!-- lym-stencil: sha256=1f86b621ac0fecc3a00ff4a34e019041e0b7bf04e02ad8280abd732aea86b024 build=ef912d4155479098331ad98253e9a38250450e09 time=2026-10-27T07:47:27Z -->
+<!-- lym-stencil: sha256=56cb2e877a75d7f718dc8a9c67a61e98e6a5dfc826d1ec664c5761b36bdecf56 build=41cf1fcacc85e69648809274b967a7dbccc4e674 time=2026-11-03T13:14:57Z -->
 
 # Final-summary spec — the producer-agnostic final-summary artifact
 
@@ -8,7 +8,7 @@
 ## What it is
 
 The final-summary artifact is the prose final-summary a run's last content-producing step writes: a first non-blank line `# <title>`, then free-form prose describing the change.
-Today that step is the `Describe` row of the loom and darn recipes, or the darn writer when the darn review is off, which writes `_lym/landing/summary.md`; its body is a change description — what the change does and why, for a PR reviewer — rather than a run narrative.
+Today that step is the `Describe` row of the tapestry, darn and sampler recipes, or the darn writer when the darn review is off, which writes `_lym/landing/summary.md`; its body is a change description — what the change does and why, for a PR reviewer — rather than a run narrative.
 The contract names no producer — a future last-content-producing step (e.g. Tenter) can satisfy it too.
 
 ## Format and validation
@@ -26,7 +26,7 @@ Everything after the heading line is the body, carried verbatim.
 ## Sole declarer, sole parser
 
 `internal/summaryparser` is the sole declarer of the artifact's filename and the sole parser of its format.
-It takes a told path — a caller resolves the containing directory and hands it in — and declares no location of its own.
+It takes a told path — a caller resolves the containing directory and hands it in — or content the caller read elsewhere, such as from an archived revision, and declares no location of its own.
 
 The contract names no location: the artifact's directory belongs to whichever producer writes it, and the consumer is handed the path, never a directory it derives itself.
 
@@ -35,7 +35,8 @@ The contract names no location: the artifact's directory belongs to whichever pr
 The artifact has two consumers today, both in `internal/landingshed`:
 
 - **`Publish`** uses the parsed title and body as the pull request's own title and body fields.
-- **`Finalize`** uses `LandingMessage` — the title, a blank line, the body with its leading whitespace trimmed, then, after a blank line, the trailer block Go composes from `landing.yaml`'s `trailer_text` and the `engine_trailers` entries of the engines that ran a session in the task — as the landing merge commit's message.
+- **`Finalize`** uses `LandingMessage` — the title, a blank line, the body with its leading whitespace trimmed, then, after a blank line, the credit block Go composes from `landing.yaml`'s `credit_*` keys and the engines that ran a session in the task — as the landing merge commit's message.
+  The pull request's body carries the same body and credit block.
 
 `Finalize`'s read is unconditional: a missing or malformed artifact there is a hard error.
 `Publish`'s read is reached only when the parent branch requires a pull request: it opens one from the artifact, or refreshes an open one's title and body, so a re-run Publish carries a rewritten description onto the pull request.
