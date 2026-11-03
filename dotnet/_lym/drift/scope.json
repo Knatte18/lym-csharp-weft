@@ -12,8 +12,8 @@
   "halt_named_at": "",
   "gate_halt_at": "",
   "baseline_head": "fa6627bdc85a5652320f115dae7f7e24d17386a3",
-  "compared_head": "efa12a10f307aad0da52c095c62172dd8d943a07",
-  "compared_at": "2026-11-03T18:48:17Z",
+  "compared_head": "ceec8ba0b1577218f09fb5e8de0bf2382471da3f",
+  "compared_at": "2026-11-03T18:52:36Z",
   "compare_passed": true,
   "accepted_profile_head": ""
 }
