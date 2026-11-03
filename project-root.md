@@ -12,13 +12,19 @@ An entry waits only on the open entries it names under After, so the entries in 
 
 Concrete and claimable; only a task can run.
 
-### Ready (1)
+### Running (1)
+
+Held by a run; its scope is locked until the run ends.
+
+| # | Task | Slug | Recipe | At | Owner | Age<br>Revised | Labels |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| T4 | **Fix the adopt check of root on neve** | [`adopt-fix-root-t1`](design-adopt-fix-root-t1.md) | darn · light | Worktree-Create | neve | 0m<br>0m |  |
+
+### Ready (0)
 
 Waits on nothing open; can start now.
 
-| # | Task | Slug | Recipe | After | Age<br>Revised | Labels |
-| --- | --- | --- | --- | --- | --- | --- |
-| T4 | **Fix the adopt check of root on neve** | [`adopt-fix-root-t1`](design-adopt-fix-root-t1.md) | darn · light |  | 0m<br>0m |  |
+_None._
 
 ### Draft (3)
 
