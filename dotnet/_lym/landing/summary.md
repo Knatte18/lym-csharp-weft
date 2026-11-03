@@ -1,31 +1,27 @@
 # Print the pipe flow report's values to 4 significant digits
 
-`ResultFormatter.Format` now rounds every numeric value in the report — velocity, Reynolds number and pressure drop — to 4 significant digits.
-Before, velocity and pressure drop used fixed `0.###` decimals and the Reynolds number `0`,
-so a small pressure drop such as `0.007 psi` kept one significant digit while `Re = 127069` printed six.
+`ResultFormatter.Format` now prints velocity, Reynolds number and pressure drop to 4 significant digits, without trailing zeros.
+Before, velocity used `0.###`, Reynolds used `0`, and the pressure drop used the default `Quantity` text, so precision varied by value and by field.
+For example, `v = 1.23456` now prints as `1.235 m/s`, and `Re = 123456` as `123500`.
+
+No issue is closed by this change.
 
 ## Design decisions
 
-- Rounded values print without trailing zeros (`1.5`, not `1.500`), matching the report's earlier style.
-- The pressure drop is formatted in `ResultFormatter` from the converted `Quantity`'s value and unit symbol.
-  `Quantity.ToString` keeps its `0.###` format, since other callers of it are outside this change.
-- Values of 10 000 and up round to a whole power of ten by scaling, since `Math.Round` takes no negative decimals; the result stays an exact integer.
+- Rounding is done in `FormatToSignificantDigits`, which derives the decimal count from the value's leading-digit exponent.
+  The result is printed as fixed-point text with `CultureInfo.InvariantCulture`, so tiny values such as `1.235e-14` print as `0.00000000000001235` instead of exponent notation.
+- `Math.Round(value, decimals)` accepts only 0 to 15 decimals, so `RoundToDecimals` rounds by scaling with a power of ten for values outside that range (large magnitudes round to the left of the decimal point, tiny ones need more than 15 decimals).
+- The pressure drop is formatted from `drop.Value` and `drop.Unit.Symbol` rather than `Quantity`'s own text, so it follows the same rule as the other values.
+- Zero prints as `0`, and negative values keep their sign.
 
 ## Tests
 
-`ResultFormatterTests` is one table-driven test asserting the full report line:
-values already at 4 digits, rounding in Pa and bar, values below 1 that the old format truncated, and zero.
+`ResultFormatterTests` replaces its three tests with one parameterised `FormatsEveryValueToFourSignificantDigits`.
+Its cases cover Pa and bar, rounding up, sub-unit values, a value near `1e-14`, a negative pressure drop and all-zero input.
 
-## Intended regression drift
+## To check by hand
 
-The `report = ...` line (line 12) of each regression case changes on purpose; every raw value line is unchanged.
-
-| Case | Before | After |
-| --- | --- | --- |
-| `water-steel-dn100-swamee-jain` | `v = 1.273 m/s, Re = 127069, dP = 7925.267 Pa` | `v = 1.273 m/s, Re = 127100, dP = 7925 Pa` |
-| `water-steel-dn100-haaland` | `v = 1.273 m/s, Re = 127069, dP = 0.078 bar` | `v = 1.273 m/s, Re = 127100, dP = 0.07793 bar` |
-| `oil-steel-dn100-laminar` | `v = 0.013 m/s, Re = 22, dP = 0.102 kPa` | `v = 0.01273 m/s, Re = 22.15, dP = 0.1019 kPa` |
-| `water-pvc-2in-transitional` | `v = 0.059 m/s, Re = 3002, dP = 0.007 psi` | `v = 0.05921 m/s, Re = 3002, dP = 0.006776 psi` |
-| `water-pvc-2in-transitional-churchill` | `v = 0.059 m/s, Re = 3002, dP = 0.007 psi` | `v = 0.05921 m/s, Re = 3002, dP = 0.006546 psi` |
-
-`oil-steel-6in-turbulent` does not drift: its report (`v = 2.001 m/s, Re = 5306, dP = 1.299 bar`) already had 4 significant digits.
+- The regression cases that render the formatted report are expected to drift on purpose.
+  This diff does not touch them, and the Drift verify was not run here: confirm the drift is reported and accepted with the stated reason.
+- Open review finding `formatter-exponent-notation` (class design, medium) in `ResultFormatter.FormatToSignificantDigits`:
+  check how the fixed-point output handles values at the extremes of the `double` range, where exponent notation could still appear or the power-of-ten scaling in `RoundToDecimals` could lose precision.
