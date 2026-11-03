@@ -1,11 +1,11 @@
 {
-  "current_producer": "Darn-Write",
+  "current_producer": "Drift-Verify",
   "state": "running",
   "error": "",
   "pause_requested": false,
   "activity": {
-    "now": "Darn-Write",
-    "last": "Drift-Await → done",
+    "now": "Drift-Verify",
+    "last": "Darn-Write → done",
     "wait": ""
   },
   "history": [
@@ -32,6 +32,33 @@
       "outcome": "done",
       "output": "",
       "at": "2026-11-03T15:28:35Z"
+    },
+    {
+      "producer": "Darn-Write",
+      "outcome": "done",
+      "output": "/home/knatte/Code/lym-csharp-LYMHUB/churchill-friction/dotnet/_lym/landing/summary.md",
+      "at": "2026-11-03T15:30:27Z",
+      "gate_attempts": 0,
+      "gate_spans": [
+        {
+          "gate": "clean",
+          "kind": "gate",
+          "start": "2026-11-03T15:30:10.489872743Z",
+          "end": "2026-11-03T15:30:10.496432159Z"
+        },
+        {
+          "gate": "verify",
+          "kind": "gate",
+          "start": "2026-11-03T15:30:10.582529725Z",
+          "end": "2026-11-03T15:30:26.2286843Z"
+        },
+        {
+          "gate": "description",
+          "kind": "gate",
+          "start": "2026-11-03T15:30:26.326550103Z",
+          "end": "2026-11-03T15:30:26.326989244Z"
+        }
+      ]
     }
   ],
   "product": {
