@@ -20,6 +20,50 @@
       "created": "2026-11-03T18:44:41Z",
       "revised": "2026-11-03T18:44:45Z",
       "profile": "light"
+    },
+    {
+      "id": 1,
+      "handle": "T2",
+      "slug": "quantity-parse",
+      "title": "Add Quantity.Parse",
+      "kind": "task",
+      "labels": [
+        "enhancement"
+      ],
+      "issues": [],
+      "recipe": "darn",
+      "depends_on": [
+        "cached-friction-factor"
+      ],
+      "isolated": false,
+      "brief": "Read a quantity back from the text Quantity.ToString writes",
+      "body": "## Goal\n\nLet callers read a quantity back from the text `Quantity.ToString` writes, such as `7.2 l/min` or `1.5 bar`, so a flow or pressure can come from a config file or a command line.\n\n## Change\n\n- Add `public static Quantity Parse(string text)` to `Quantity` in `dotnet/src/LymCsharp.Units/Quantity.cs`.\n  - It reads a number, one space and a unit symbol, the form `Quantity.ToString` writes.\n  - It looks the symbol up through `UnitRegistry.Find`, so an unknown symbol throws `KeyNotFoundException` as `Find` does.\n  - Text with no space in it throws `FormatException`.\n- Nothing else changes: no caller uses `Parse` yet, and no calculation or report output moves.\n\n## Tests\n\nAdd to `dotnet/tests/LymCsharp.Units.Tests/QuantityTests.cs`:\n\n- `Parse(\"1.5 bar\")` gives the value 1.5 in `UnitCatalog.Bar`;\n- `Parse(\"7.2 l/min\")` gives the value 7.2 in `UnitCatalog.LitrePerMinute`;\n- `Parse(q.ToString())` gives back `q` for a quantity such as 3.25 psi;\n- an unknown symbol throws `KeyNotFoundException`;\n- text with no space throws `FormatException`.\n",
+      "status": "draft",
+      "created": "2026-11-03T18:44:45Z",
+      "revised": "2026-11-03T18:44:45Z",
+      "profile": "light"
+    },
+    {
+      "id": 2,
+      "handle": "T3",
+      "slug": "transitional-report-note",
+      "title": "Note transitional flow in the pipe flow report",
+      "kind": "task",
+      "labels": [
+        "enhancement"
+      ],
+      "issues": [],
+      "recipe": "darn",
+      "depends_on": [
+        "quantity-parse"
+      ],
+      "isolated": false,
+      "brief": "Append a transitional-flow warning to the report line",
+      "body": "## Goal\n\nWarn the reader of a pipe flow report when the flow is transitional.\nBetween a Reynolds number of 2300 and 4000 no friction model is reliable, and the report line gives no sign of it.\n\n## Change\n\n- In `ResultFormatter.Format` (`dotnet/src/LymCsharp.Reporting/ResultFormatter.cs`), append ` (transitional: friction factor uncertain)` to the line when `result.Regime` is `FlowRegime.Transitional`.\n  For example: `Transitional flow, v = 0.05 m/s, Re = 3000, dP = 0.1 psi (transitional: friction factor uncertain)`.\n- Laminar and turbulent lines stay exactly as they are.\n- Update the `Format` doc comment to name the note.\n\n## Intended output change\n\nThis change moves regression output on purpose, in one place only:\nthe `report = …` line of each regression case whose flow is transitional gains the note.\nEvery other line of those cases, and every line of the laminar and turbulent cases, stays as it is.\n\n## Tests\n\n- Add a transitional case to `ResultFormatterTests.FormatsEveryValueToFourSignificantDigits`, or a test beside it, that expects the note.\n- The existing laminar and turbulent cases stay unchanged.\n",
+      "status": "draft",
+      "created": "2026-11-03T18:44:45Z",
+      "revised": "2026-11-03T18:44:45Z",
+      "profile": "light"
     }
   ],
   "prime_owner": "neve",
