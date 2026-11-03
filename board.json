@@ -1,27 +1,6 @@
 {
   "version": 1,
-  "entries": [
-    {
-      "id": 2,
-      "handle": "T3",
-      "slug": "report-significant-digits",
-      "title": "The pipe flow report prints its values to 4 significant digits",
-      "kind": "task",
-      "labels": [
-        "enhancement"
-      ],
-      "issues": [],
-      "recipe": "darn",
-      "depends_on": [],
-      "isolated": false,
-      "brief": "",
-      "body": "`ResultFormatter` (`src/LymCsharp.Reporting/ResultFormatter.cs`) formats the pipe flow report's numbers.\n\n## Expected\n\n- The report prints every numeric value to 4 significant digits.\n- The formatter's tests follow the new format.\n- The regression cases that render the formatted report now drift on purpose, and the run records that drift as intended.\n\n## Why\n\nThis run proves that Drift reports an intended output change and that the run's Drift verify accepts it with a stated reason, on a hub whose anchor is `dotnet/`.\n",
-      "status": "done",
-      "created": "2026-11-03T14:16:22Z",
-      "revised": "2026-11-03T14:16:27Z",
-      "profile": "light"
-    }
-  ],
+  "entries": [],
   "prime_owner": "neve",
   "draft_status": true
 }
