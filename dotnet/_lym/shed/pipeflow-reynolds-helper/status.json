@@ -1,13 +1,11 @@
 {
-  "current_producer": "Drift-Await",
+  "current_producer": "Darn-Write",
   "state": "running",
   "error": "",
-  "pending_by": "shed",
-  "entered_row": "Drift-Await",
   "pause_requested": false,
   "activity": {
-    "now": "Drift-Await",
-    "last": "Drift-Await → stuck",
+    "now": "Darn-Write",
+    "last": "Drift-Await → done",
     "wait": ""
   },
   "history": [
@@ -35,6 +33,13 @@
       "output": "",
       "at": "2026-11-03T14:28:02Z",
       "budget_exempt": true
+    },
+    {
+      "producer": "Drift-Await",
+      "outcome": "done",
+      "output": "",
+      "at": "2026-11-03T14:28:51Z",
+      "by": "shed"
     }
   ],
   "product": {
