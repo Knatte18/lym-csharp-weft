@@ -2,8 +2,6 @@
 
 `transitional-report-note` · Task · enhancement · draft
 
-Depends on: [`quantity-parse`](design-quantity-parse.md)
-
 ## Goal
 
 Warn the reader of a pipe flow report when the flow is transitional.
